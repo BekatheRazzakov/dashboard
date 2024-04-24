@@ -1,0 +1,62 @@
+.dashboard {
+  padding: 40px 24px;
+  flex-grow: 1;
+}
+
+.paper {
+  border-radius: 20px;
+  background: #FFFFFF;
+}
+
+.pwd {
+  font-size: 12px;
+}
+
+.dashboard-header {
+  display: flex;
+  flex-direction: column;
+}
+
+.current-page-name {
+  color: var(--dark-blue);
+  font-size: 36px;
+  font-weight: 800;
+  line-height: 54px;
+}
+
+.statistics {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.abons-in-numbers {
+  width: 100%;
+  height: 114px;
+}
+
+.date-picker-block {
+  width: calc(25% - 24px);
+  height: 345px;
+}
+
+.percentage {
+  width: calc(25% - 24px);
+  height: 345px;
+}
+
+.si-rating {
+  width: 50%;
+  height: 345px;
+}
+
+.abons-in-graphs {
+  width: calc(50% - 24px);
+  height: 385px;
+}
+
+.tariffs {
+  width: 50%;
+  height: 385px;
+}
