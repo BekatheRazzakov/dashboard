@@ -2,7 +2,7 @@
   width: 312px;
   height: 100%;
   border-right: 1px solid #E1E4E6;
-  background-color: #F4F7FE;
+  background-color: var(--secondary);
 }
 
 .logo {
@@ -29,13 +29,13 @@
   margin-right: 10px;
   border-top-right-radius: 100px;
   border-bottom-right-radius: 100px;
-  color: var(--dark-blue);
+  color: var(--primary);
   cursor: pointer;
 }
 
 .menu-item-selected {
-  background-color: var(--dark-blue);
-  color: white;
+  background-color: var(--primary);
+  color: var(--surface);
 }
 
 .menu-item-inner {
@@ -52,7 +52,7 @@
 }
 
 .menu-item-selected path {
-  stroke: #FFFFFF;
+  stroke: var(--surface);
 }
 
 .menu-item-location {
@@ -64,5 +64,5 @@
 }
 
 .menu-item-selected .menu-item-location path {
-  fill: #FFFFFF;
+  fill: var(--surface);
 }

@@ -1,5 +1,20 @@
 :root {
-  --dark-blue: #345976;
+  --primary: #345976;
+  --background: #F4F4F2;
+  --lightest: #F3F2F1;
+  --surface: #FFFFFF;
+  --light: #BFBFBF;
+  --hard: #8F8F8F;
+  --secondary: #F4F7FE;
+  --hardest: #606060;
+  --red-main: #E31A1A;
+  --green-main: #1DBF12;
+  --warning: #FCA21C;
+  --info: #1CB9FC;
+  --blue-secondary: #9AACBB;
+  --green-secondary: #D2F2D0;
+  --purple-secondary: #D9D1FF;
+  --red-secondary: #F6DEDE;
 }
 
 html {
