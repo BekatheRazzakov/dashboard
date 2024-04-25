@@ -155,7 +155,7 @@
 .abons-in-graphs-numbers {
   display: flex;
   flex-direction: column;
-  width: 140px;
+  min-width: 140px;
 }
 
 .abons-in-graphs-numbers .abons-in-numbers-date {

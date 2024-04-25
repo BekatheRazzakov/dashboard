@@ -1,10 +1,149 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import DatePicker from "../../components/DatePicker/DatePicker";
 import {useAppDispatch, useAppSelector} from "../../app/hooks";
 import moment from "moment";
 import {setDateFieldName} from "../../features/dataSlice";
-import './dashboard.css';
 import {fetchAbonsData} from "../../features/dataThunk";
+import './dashboard.css';
+import {ResponsiveLine} from "@nivo/line";
+
+const data = [
+  {
+    "id": "ААБ",
+    "data": [
+      {
+        "x": 'Апр 13',
+        "y": "41000"
+      },
+      {
+        "x": 'Апр 14',
+        "y": "55000"
+      },
+      {
+        "x": 'Апр 15',
+        "y": "42000"
+      },
+      {
+        "x": 'Апр 16',
+        "y": "53000"
+      },
+      {
+        "x": 'Апр 17',
+        "y": "38000"
+      },
+      {
+        "x": 'Апр 18',
+        "y": "47000"
+      },
+      {
+        "x": 'Апр 19',
+        "y": "45000"
+      },
+      {
+        "x": 'Апр 20',
+        "y": "50000"
+      },
+      {
+        "x": 'Апр 21',
+        "y": "40000"
+      },
+      {
+        "x": 'Апр 22',
+        "y": "60000"
+      },
+      {
+        "x": 'Апр 23',
+        "y": "20000"
+      },
+      {
+        "x": 'Апр 24',
+        "y": "22000"
+      },
+    ],
+  },
+  {
+    "id": "НАБ",
+    "data": [
+      {
+        "x": 'Апр 15',
+        "y": "37000"
+      },
+      {
+        "x": 'Апр 16',
+        "y": "64000"
+      },
+      {
+        "x": 'Апр 17',
+        "y": "46000"
+      },
+      {
+        "x": 'Апр 18',
+        "y": "55000"
+      },
+      {
+        "x": 'Апр 19',
+        "y": "59000"
+      },
+      {
+        "x": 'Апр 20',
+        "y": "43000"
+      },
+      {
+        "x": 'Апр 21',
+        "y": "40000"
+      },
+      {
+        "x": 'Апр 22',
+        "y": "35000"
+      },
+      {
+        "x": 'Апр 23',
+        "y": "58000"
+      }
+    ],
+  },
+  {
+    "id": "Отклонение",
+    "data": [
+      {
+        "x": 'Апр 15',
+        "y": "43000"
+      },
+      {
+        "x": 'Апр 16',
+        "y": "54000"
+      },
+      {
+        "x": 'Апр 17',
+        "y": "48000"
+      },
+      {
+        "x": 'Апр 18',
+        "y": "50000"
+      },
+      {
+        "x": 'Апр 19',
+        "y": "45000"
+      },
+      {
+        "x": 'Апр 20',
+        "y": "54000"
+      },
+      {
+        "x": 'Апр 21',
+        "y": "38000"
+      },
+      {
+        "x": 'Апр 22',
+        "y": "48000"
+      },
+      {
+        "x": 'Апр 23',
+        "y": "42000"
+      }
+    ],
+  },
+];
 
 const Dashboard = () => {
   const dispatch = useAppDispatch();
@@ -128,7 +267,11 @@ const Dashboard = () => {
             </div>
             <span
               style={{
-                fontWeight: '700', fontSize: '12px', color: 'var(--blue-secondary)', lineHeight: '18px', marginTop: '30px'
+                fontWeight: '700',
+                fontSize: '12px',
+                color: 'var(--blue-secondary)',
+                lineHeight: '18px',
+                marginTop: '30px'
               }}
             >Всего абонентов</span>
             <span
@@ -142,6 +285,71 @@ const Dashboard = () => {
               <span>Отклонение</span>
             </div>
           </div>
+          <ResponsiveLine
+            data={data}
+            margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
+            xScale={{ type: 'point' }}
+            yScale={{
+              type: 'linear',
+              min: 'auto',
+              max: 'auto',
+              stacked: true,
+              reverse: false
+            }}
+            yFormat=" >-.2f"
+            axisTop={null}
+            axisRight={null}
+            axisBottom={{
+              tickSize: 5,
+              tickPadding: 5,
+              tickRotation: 0,
+              legend: 'transportation',
+              legendOffset: 36,
+              legendPosition: 'middle',
+              truncateTickAt: 0
+            }}
+            axisLeft={{
+              tickSize: 5,
+              tickPadding: 5,
+              tickRotation: 0,
+              legendOffset: -40,
+              legendPosition: 'middle',
+              truncateTickAt: 0
+            }}
+            pointSize={10}
+            pointColor={{ theme: 'background' }}
+            pointBorderWidth={2}
+            pointBorderColor={{ from: 'serieColor' }}
+            pointLabelYOffset={-12}
+            enableTouchCrosshair={true}
+            useMesh={true}
+            legends={[
+              {
+                anchor: 'bottom-right',
+                direction: 'column',
+                justify: false,
+                translateX: 100,
+                translateY: 0,
+                itemsSpacing: 0,
+                itemDirection: 'left-to-right',
+                itemWidth: 80,
+                itemHeight: 20,
+                itemOpacity: 0.75,
+                symbolSize: 12,
+                symbolShape: 'circle',
+                symbolBorderColor: 'rgba(0, 0, 0, .5)',
+                effects: [
+                  {
+                    on: 'hover',
+                    style: {
+                      itemBackground: 'rgba(0, 0, 0, .03)',
+                      itemOpacity: 1
+                    }
+                  }
+                ]
+              }
+            ]}
+          />
         </div>
         <div className="paper tariffs"></div>
       </div>
