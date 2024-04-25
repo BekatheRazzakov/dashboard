@@ -1,10 +1,7 @@
 import React, {useState} from 'react';
 import moment from "moment";
 import Select from "../Select/Select";
-import 'moment/locale/ru';
 import './datePicker.css';
-
-moment.locale('ru');
 
 const DatePicker = ({date1, date2, changeHandler}) => {
   const [currentDate, setCurrentDate] = useState(moment());

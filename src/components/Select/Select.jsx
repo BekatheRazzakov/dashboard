@@ -2,11 +2,11 @@ import React from 'react';
 import {ReactComponent as ArrowDown} from "../../assets/arrow-down.svg";
 import './select.css';
 import {useAppDispatch, useAppSelector} from "../../app/hooks";
-import {setDropdown} from "../../features/usersSlice";
+import {setDropdown} from "../../features/dataSlice";
 
 const Select = ({name, value, options, changeHandler, style}) => {
   const dispatch = useAppDispatch();
-  const currentDropdown = useAppSelector(state => state.userState.currentDropDown);
+  const currentDropdown = useAppSelector(state => state.dataState.currentDropDown);
 
   return (
     <div

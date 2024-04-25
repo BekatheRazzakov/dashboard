@@ -34,8 +34,98 @@
 }
 
 .abons-in-numbers {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: 15px;
   width: 100%;
   height: 114px;
+  padding: 15px 20px;
+}
+
+.abons-in-numbers-date {
+  width: 116px;
+  border-radius: 20px;
+  border: 1px solid transparent;
+  background-image: url("../../assets/calendar.svg");
+  background-size: 18px;
+  background-position: center 15px;
+  background-repeat: no-repeat;
+  line-height: 24px;
+  font-weight: 700;
+  color: var(--blue-secondary);
+  padding-top: 45px;
+  text-align: center;
+  transition: 0.1s;
+}
+
+.abons-in-numbers-date-selected {
+  background-color: var(--secondary);
+  box-shadow: 0 3px 8px 0 #0000001A;
+  border: 1px solid #F3F2F1;
+}
+
+.abons-oab,
+.abons-aab,
+.abons-nab,
+.abons-otk-num,
+.abons-otk-per {
+  display: flex;
+  flex-direction: column;
+  padding: 15px 15px 15px 70px;
+  border: 1px solid var(--lightest);
+  background-color: var(--surface);
+  border-radius: 20px;
+  flex-grow: 1;
+  box-sizing: border-box;
+  background-repeat: no-repeat;
+  background-position: 15px center;
+  background-size: 44px;
+}
+
+.abons-oab {
+  background-image: url("../../assets/abons-all.svg");
+}
+
+.abons-aab {
+  background-image: url("../../assets/abons-up.svg");
+}
+
+.abons-nab {
+  background-image: url("../../assets/abons-down.svg");
+}
+
+.abons-otk-num {
+  background-image: url("../../assets/otklonenie.svg");
+}
+
+.abons-otk-per {
+  background-image: url("../../assets/otklonenie.svg");
+}
+
+.abons-card-title {
+  color: var(--primary);
+  font-weight: 700;
+  line-height: 24px;
+}
+
+.abons-card-value {
+  color: var(--primary);
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.abons-otk-num .abons-card-value,
+.abons-otk-per .abons-card-value {
+  color: var(--purple-main);
+}
+
+.abons-card-value-up {
+  color: var(--green-main);
+}
+
+.abons-card-value-down {
+  color: var(--red-main);
 }
 
 .date-picker-block {
@@ -55,8 +145,66 @@
 }
 
 .abons-in-graphs {
+  display: flex;
+  gap: 17px;
   width: calc(50% - 24px);
   height: 385px;
+  padding: 30px;
+}
+
+.abons-in-graphs-numbers {
+  display: flex;
+  flex-direction: column;
+  width: 140px;
+}
+
+.abons-in-graphs-numbers .abons-in-numbers-date {
+  width: 100%;
+  text-align: right;
+  padding: 7px 10px 5px;
+  background-position: 12px center;
+  font-weight: 400;
+  box-sizing: border-box;
+  background-size: 14px;
+}
+
+.abon-types {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 30px;
+}
+
+.abon-types span {
+  position: relative;
+  display: inline-block;
+  padding-left: 20px;
+  font-weight: 700;
+  color: var(--primary);
+  line-height: 24px;
+}
+
+.abon-types span::before {
+  position: absolute;
+  content: '';
+  top: 50%;
+  left: 0;
+  transform: translateY(-55%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.abon-types span:nth-child(1)::before {
+  background-color: var(--green-main);
+}
+
+.abon-types span:nth-child(2)::before {
+  background-color: var(--red-main);
+}
+
+.abon-types span:nth-child(3)::before {
+  background-color: var(--purple-main);
 }
 
 .tariffs {

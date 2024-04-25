@@ -1,7 +1,3 @@
-.date-picker {
-  user-select: none;
-}
-
 .date-picker .week-names {
   display: flex;
   justify-content: space-between;

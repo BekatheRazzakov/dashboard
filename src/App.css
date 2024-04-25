@@ -15,10 +15,12 @@
   --green-secondary: #D2F2D0;
   --purple-secondary: #D9D1FF;
   --red-secondary: #F6DEDE;
+  --purple-main: #4318FF;
 }
 
 html {
   width: 1920px!important;
+  user-select: none;
 }
 
 html, body, #root, .App {

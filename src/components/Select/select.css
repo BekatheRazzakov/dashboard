@@ -34,7 +34,6 @@
   border-radius: 20px;
   min-height: 30px;
   transition: 0.1s;
-  user-select: none;
 }
 
 .select-current-option {
