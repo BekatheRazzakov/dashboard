@@ -2,6 +2,7 @@ import {combineReducers, configureStore} from "@reduxjs/toolkit";
 import {FLUSH, PAUSE, PERSIST, persistReducer, persistStore, PURGE, REGISTER, REHYDRATE,} from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import {userReducer} from "../features/usersSlice";
+import {dataReducer} from "../features/dataSlice";
 
 const usersPersistConfig = {
   key: "skynetUser:user",
@@ -11,6 +12,7 @@ const usersPersistConfig = {
 
 const rootReducer = combineReducers({
   userState: persistReducer(usersPersistConfig, userReducer),
+  dataState: persistReducer(usersPersistConfig, dataReducer),
 });
 
 export const store = configureStore({
