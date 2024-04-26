@@ -1,11 +1,11 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import DatePicker from "../../components/DatePicker/DatePicker";
 import {useAppDispatch, useAppSelector} from "../../app/hooks";
 import moment from "moment";
 import {setDateFieldName} from "../../features/dataSlice";
 import {fetchAbonsData} from "../../features/dataThunk";
-import './dashboard.css';
 import {ResponsiveLine} from "@nivo/line";
+import './dashboard.css';
 
 const data = [
   {
@@ -17,31 +17,31 @@ const data = [
       },
       {
         "x": 'Апр 14',
-        "y": "55000"
+        "y": "41500"
       },
       {
         "x": 'Апр 15',
-        "y": "42000"
+        "y": "41900"
       },
       {
         "x": 'Апр 16',
-        "y": "53000"
+        "y": "42000"
       },
       {
         "x": 'Апр 17',
-        "y": "38000"
+        "y": "42500"
       },
       {
         "x": 'Апр 18',
-        "y": "47000"
+        "y": "41000"
       },
       {
         "x": 'Апр 19',
-        "y": "45000"
+        "y": "42000"
       },
       {
         "x": 'Апр 20',
-        "y": "50000"
+        "y": "43000"
       },
       {
         "x": 'Апр 21',
@@ -49,15 +49,15 @@ const data = [
       },
       {
         "x": 'Апр 22',
-        "y": "60000"
+        "y": "39500"
       },
       {
         "x": 'Апр 23',
-        "y": "20000"
+        "y": "42200"
       },
       {
         "x": 'Апр 24',
-        "y": "22000"
+        "y": "42000"
       },
     ],
   },
@@ -66,39 +66,39 @@ const data = [
     "data": [
       {
         "x": 'Апр 15',
-        "y": "37000"
+        "y": "5000"
       },
       {
         "x": 'Апр 16',
-        "y": "64000"
+        "y": "5200"
       },
       {
         "x": 'Апр 17',
-        "y": "46000"
+        "y": "4900"
       },
       {
         "x": 'Апр 18',
-        "y": "55000"
+        "y": "4850"
       },
       {
         "x": 'Апр 19',
-        "y": "59000"
+        "y": "4800"
       },
       {
         "x": 'Апр 20',
-        "y": "43000"
+        "y": "4950"
       },
       {
         "x": 'Апр 21',
-        "y": "40000"
+        "y": "4700"
       },
       {
         "x": 'Апр 22',
-        "y": "35000"
+        "y": "4750"
       },
       {
         "x": 'Апр 23',
-        "y": "58000"
+        "y": "5000"
       }
     ],
   },
@@ -107,39 +107,39 @@ const data = [
     "data": [
       {
         "x": 'Апр 15',
-        "y": "43000"
+        "y": "34000"
       },
       {
         "x": 'Апр 16',
-        "y": "54000"
+        "y": "37000"
       },
       {
         "x": 'Апр 17',
-        "y": "48000"
+        "y": "40000"
       },
       {
         "x": 'Апр 18',
-        "y": "50000"
+        "y": "39000"
       },
       {
         "x": 'Апр 19',
-        "y": "45000"
+        "y": "41000"
       },
       {
         "x": 'Апр 20',
-        "y": "54000"
+        "y": "44000"
       },
       {
         "x": 'Апр 21',
-        "y": "38000"
+        "y": "45000"
       },
       {
         "x": 'Апр 22',
-        "y": "48000"
+        "y": "41000"
       },
       {
         "x": 'Апр 23',
-        "y": "42000"
+        "y": "40000"
       }
     ],
   },
@@ -154,9 +154,14 @@ const Dashboard = () => {
     periodDate2: moment().subtract(1, 'days').format('DD.MM.YYYY'),
     abonsNumDate: moment().subtract(1, 'days').format('DD.MM.YYYY'),
   });
+  const [currentDate, setCurrentDate] = useState(moment(state.periodDate1, 'DD.MM.YYYY').clone());
   const aabPercentage = Number(((abonsData.aab || 0) / (abonsData.oab || 0) * 100).toFixed(2));
   const otkloneniePercentage = Number((aabPercentage - 90).toFixed(2));
   const otklonenieKolvo = Number((((abonsData.oab || 0) / 100 * 90) / 100 * otkloneniePercentage).toFixed());
+  const minY = Math.min(...data.flatMap(series => series.data.map(d => parseInt(d.y))));
+  const maxY = Math.max(...data.flatMap(series => series.data.map(d => parseInt(d.y))));
+  const tickStep = 5000;
+  const tickValues = Array.from({length: Math.ceil((maxY - minY) / tickStep) + 1}, (_, index) => minY + index * tickStep);
 
   const changeHandler = (value) => {
     if (dateFieldName === 'periodDate1') {
@@ -198,6 +203,15 @@ const Dashboard = () => {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
   };
 
+  const xValues = data.reduce((acc, series) => {
+    series.data.forEach(datum => {
+      if (!acc.includes(datum.x)) {
+        acc.push(datum.x);
+      }
+    });
+    return acc;
+  }, []);
+
   useEffect(() => {
     dispatch(fetchAbonsData({date: state.abonsNumDate}));
   }, [dispatch, state.abonsNumDate]);
@@ -233,11 +247,11 @@ const Dashboard = () => {
           </div>
           <div className="abons-otk-num">
             <span className="abons-card-title">Отклонение</span>
-            <span className="abons-card-value">450</span>
+            <span className="abons-card-value">{otklonenieKolvo}</span>
           </div>
           <div className="abons-otk-per">
             <span className="abons-card-title">Отклонение %</span>
-            <span className="abons-card-value">-3.04%</span>
+            <span className="abons-card-value">{otkloneniePercentage}%</span>
           </div>
         </div>
         <div className="paper date-picker-block">
@@ -285,71 +299,58 @@ const Dashboard = () => {
               <span>Отклонение</span>
             </div>
           </div>
-          <ResponsiveLine
-            data={data}
-            margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
-            xScale={{ type: 'point' }}
-            yScale={{
-              type: 'linear',
-              min: 'auto',
-              max: 'auto',
-              stacked: true,
-              reverse: false
-            }}
-            yFormat=" >-.2f"
-            axisTop={null}
-            axisRight={null}
-            axisBottom={{
-              tickSize: 5,
-              tickPadding: 5,
-              tickRotation: 0,
-              legend: 'transportation',
-              legendOffset: 36,
-              legendPosition: 'middle',
-              truncateTickAt: 0
-            }}
-            axisLeft={{
-              tickSize: 5,
-              tickPadding: 5,
-              tickRotation: 0,
-              legendOffset: -40,
-              legendPosition: 'middle',
-              truncateTickAt: 0
-            }}
-            pointSize={10}
-            pointColor={{ theme: 'background' }}
-            pointBorderWidth={2}
-            pointBorderColor={{ from: 'serieColor' }}
-            pointLabelYOffset={-12}
-            enableTouchCrosshair={true}
-            useMesh={true}
-            legends={[
-              {
-                anchor: 'bottom-right',
-                direction: 'column',
-                justify: false,
-                translateX: 100,
-                translateY: 0,
-                itemsSpacing: 0,
-                itemDirection: 'left-to-right',
-                itemWidth: 80,
-                itemHeight: 20,
-                itemOpacity: 0.75,
-                symbolSize: 12,
-                symbolShape: 'circle',
-                symbolBorderColor: 'rgba(0, 0, 0, .5)',
-                effects: [
-                  {
-                    on: 'hover',
-                    style: {
-                      itemBackground: 'rgba(0, 0, 0, .03)',
-                      itemOpacity: 1
-                    }
-                  }
-                ]
-              }
-            ]}
-          />
+          <div className="abons-chart">
+            <ResponsiveLine
+              data={data}
+              colors={['#1DBF12', '#E31A1A', '#4318FF']}
+              margin={{top: 50, right: 160, bottom: 50, left: 60}}
+              curve="catmullRom"
+              enableCrosshair={false}
+              axisTop={null}
+              axisRight={{
+                tickValues,
+                tickSize: 5,
+                tickPadding: 5,
+                tickRotation: 0,
+                format: '.2s',
+                legend: '',
+                legendOffset: 0,
+                min: minY,
+              }}
+              axisBottom={{
+                tickValues: xValues,
+                tickSize: 5,
+                tickPadding: 5,
+                tickRotation: 45,
+                format: value => value,
+                legendOffset: 36,
+                legendPosition: 'middle'
+              }}
+              axisLeft={null}
+              pointBorderWidth={1}
+              enableTouchCrosshair={true}
+              useMesh={true}
+              yScale={{
+                type: 'linear',
+                min: 'auto',
+                max: tickValues[tickValues.length - 1],
+                stacked: false,
+                reverse: false
+              }}
+              yFormat={value => (value < minY ? null : value)}
+              tooltip={({point}) => (
+                <div
+                  style={{
+                    background: point.color, padding: '4px 16px 2px',
+                    color: 'white', borderRadius: '8px', textAlign: 'center',
+                  }}
+                >
+                  <div style={{fontSize: '12px', opacity: '0.7'}}>{point.data.x}</div>
+                  <div style={{fontWeight: '700', lineHeight: '24px'}}>{point.data.y}</div>
+                </div>
+              )}
+            />
+          </div>
         </div>
         <div className="paper tariffs"></div>
       </div>

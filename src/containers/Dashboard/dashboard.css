@@ -1,6 +1,7 @@
 .dashboard {
   padding: 20px 24px 0;
   flex-grow: 1;
+  margin-left: 312px;
 }
 
 .paper {
@@ -205,6 +206,12 @@
 
 .abon-types span:nth-child(3)::before {
   background-color: var(--purple-main);
+}
+
+.abons-chart {
+  width: 100%;
+  height: 100%;
+  transform: scale(1.3) translate(45px, -14px);
 }
 
 .tariffs {

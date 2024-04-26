@@ -1,8 +1,12 @@
 .menu {
+  position: fixed;
+  top: 0;
+  left: 0;
   min-width: 312px;
   height: 100%;
   border-right: 1px solid #E1E4E6;
   background-color: var(--secondary);
+  z-index: 5;
 }
 
 .logo {
