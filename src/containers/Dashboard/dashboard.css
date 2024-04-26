@@ -157,6 +157,7 @@
   display: flex;
   flex-direction: column;
   min-width: 140px;
+  z-index: 1;
 }
 
 .abons-in-graphs-numbers .abons-in-numbers-date {
@@ -188,30 +189,32 @@
 .abon-types span::before {
   position: absolute;
   content: '';
-  top: 50%;
+  top: 48%;
   left: 0;
   transform: translateY(-55%);
   width: 10px;
   height: 10px;
   border-radius: 50%;
+  background-color: transparent;
 }
 
-.abon-types span:nth-child(1)::before {
+.abon-types .abon-type-aab::before {
   background-color: var(--green-main);
 }
 
-.abon-types span:nth-child(2)::before {
+.abon-types .abon-type-nab::before {
   background-color: var(--red-main);
 }
 
-.abon-types span:nth-child(3)::before {
+.abon-types .abon-type-otkl::before {
   background-color: var(--purple-main);
 }
 
 .abons-chart {
   width: 100%;
   height: 100%;
-  transform: scale(1.3) translate(45px, -14px);
+  transform: scale(1.15) translate(-10px, -12px);
+  z-index: 0;
 }
 
 .tariffs {

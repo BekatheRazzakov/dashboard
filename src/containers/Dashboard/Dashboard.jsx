@@ -10,136 +10,139 @@ import './dashboard.css';
 const data = [
   {
     "id": "ААБ",
+    "color": '#1DBF12',
     "data": [
       {
         "x": 'Апр 13',
-        "y": "41000"
+        "y": "3054"
       },
       {
         "x": 'Апр 14',
-        "y": "41500"
+        "y": "3708"
       },
       {
         "x": 'Апр 15',
-        "y": "41900"
+        "y": "3690"
       },
       {
         "x": 'Апр 16',
-        "y": "42000"
+        "y": "3560"
       },
       {
         "x": 'Апр 17',
-        "y": "42500"
+        "y": "3800"
       },
       {
         "x": 'Апр 18',
-        "y": "41000"
+        "y": "3850"
       },
       {
         "x": 'Апр 19',
-        "y": "42000"
+        "y": "3825"
       },
       {
         "x": 'Апр 20',
-        "y": "43000"
+        "y": "3900"
       },
       {
         "x": 'Апр 21',
-        "y": "40000"
+        "y": "3930"
       },
       {
         "x": 'Апр 22',
-        "y": "39500"
+        "y": "3870"
       },
       {
         "x": 'Апр 23',
-        "y": "42200"
+        "y": "3890"
       },
       {
         "x": 'Апр 24',
-        "y": "42000"
+        "y": "3920"
       },
     ],
   },
   {
     "id": "НАБ",
+    "color": '#E31A1A',
     "data": [
       {
         "x": 'Апр 15',
-        "y": "5000"
+        "y": "567"
       },
       {
         "x": 'Апр 16',
-        "y": "5200"
+        "y": "550"
       },
       {
         "x": 'Апр 17',
-        "y": "4900"
+        "y": "545"
       },
       {
         "x": 'Апр 18',
-        "y": "4850"
+        "y": "557"
       },
       {
         "x": 'Апр 19',
-        "y": "4800"
+        "y": "540"
       },
       {
         "x": 'Апр 20',
-        "y": "4950"
+        "y": "530"
       },
       {
         "x": 'Апр 21',
-        "y": "4700"
+        "y": "538"
       },
       {
         "x": 'Апр 22',
-        "y": "4750"
+        "y": "500"
       },
       {
         "x": 'Апр 23',
-        "y": "5000"
+        "y": "490"
       }
     ],
   },
   {
     "id": "Отклонение",
+    "color": '#4318FF',
     "data": [
       {
         "x": 'Апр 15',
-        "y": "34000"
+        "y": "13"
       },
       {
         "x": 'Апр 16',
-        "y": "37000"
+        "y": "12.5"
       },
       {
         "x": 'Апр 17',
-        "y": "40000"
+        "y": "12.8"
       },
       {
         "x": 'Апр 18',
-        "y": "39000"
+        "y": "11.2"
       },
       {
         "x": 'Апр 19',
-        "y": "41000"
+        "y": "11.9"
       },
       {
         "x": 'Апр 20',
-        "y": "44000"
+        "y": "13"
       },
       {
         "x": 'Апр 21',
-        "y": "45000"
+        "y": "13.5"
       },
       {
         "x": 'Апр 22',
-        "y": "41000"
+        "y": "12.4"
       },
       {
         "x": 'Апр 23',
-        "y": "40000"
+        "y": "12"
       }
     ],
   },
@@ -154,13 +157,24 @@ const Dashboard = () => {
     periodDate2: moment().subtract(1, 'days').format('DD.MM.YYYY'),
     abonsNumDate: moment().subtract(1, 'days').format('DD.MM.YYYY'),
   });
-  const [currentDate, setCurrentDate] = useState(moment(state.periodDate1, 'DD.MM.YYYY').clone());
+  const [currentLineChart, setCurrentLineChart] = useState('aab');
   const aabPercentage = Number(((abonsData.aab || 0) / (abonsData.oab || 0) * 100).toFixed(2));
   const otkloneniePercentage = Number((aabPercentage - 90).toFixed(2));
   const otklonenieKolvo = Number((((abonsData.oab || 0) / 100 * 90) / 100 * otkloneniePercentage).toFixed());
-  const minY = Math.min(...data.flatMap(series => series.data.map(d => parseInt(d.y))));
-  const maxY = Math.max(...data.flatMap(series => series.data.map(d => parseInt(d.y))));
-  const tickStep = 5000;
+  const minY = Math.min(...[data[
+    currentLineChart === 'aab' ? 0 :
+      currentLineChart === 'nab' ? 1 :
+        currentLineChart === 'otkl' ? 2 : 0
+    ]].flatMap(series => series.data.map(d => parseInt(d.y))));
+  const maxY = Math.max(...[data[
+    currentLineChart === 'aab' ? 0 :
+      currentLineChart === 'nab' ? 1 :
+        currentLineChart === 'otkl' ? 2 : 0
+    ]].flatMap(series => series.data.map(d => parseInt(d.y))));
+  const tickStep =
+    currentLineChart === 'aab' ? 200 :
+      currentLineChart === 'nab' ? 50 :
+        currentLineChart === 'otkl' ? 4 : 0;
   const tickValues = Array.from({length: Math.ceil((maxY - minY) / tickStep) + 1}, (_, index) => minY + index * tickStep);
 
   const changeHandler = (value) => {
@@ -202,15 +216,6 @@ const Dashboard = () => {
   const formatNumber = (number) => {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
   };
-
-  const xValues = data.reduce((acc, series) => {
-    series.data.forEach(datum => {
-      if (!acc.includes(datum.x)) {
-        acc.push(datum.x);
-      }
-    });
-    return acc;
-  }, []);
 
   useEffect(() => {
     dispatch(fetchAbonsData({date: state.abonsNumDate}));
@@ -294,34 +299,54 @@ const Dashboard = () => {
               }}
             >{abonsData.oab}</span>
             <div className="abon-types">
-              <span>ААБ</span>
-              <span>НАБ</span>
-              <span>Отклонение</span>
+              <span
+                className={currentLineChart === 'aab' ? "abon-type-aab" : ''}
+                onClick={() => setCurrentLineChart('aab')}
+              >ААБ</span>
+              <span
+                className={currentLineChart === 'nab' ? "abon-type-nab" : ''}
+                onClick={() => setCurrentLineChart('nab')}
+              >НАБ</span>
+              <span
+                className={currentLineChart === 'otkl' ? "abon-type-otkl" : ''}
+                onClick={() => setCurrentLineChart('otkl')}
+              >Отклонение</span>
             </div>
           </div>
           <div className="abons-chart">
             <ResponsiveLine
-              data={data}
-              colors={['#1DBF12', '#E31A1A', '#4318FF']}
+              width={650}
+              data={
+                currentLineChart === 'aab' ? [data[0]] :
+                  currentLineChart === 'nab' ? [data[1]] :
+                    currentLineChart === 'otkl' ? [data[2]] : []
+              }
+              colors={[
+                currentLineChart === 'aab' ? ['#1DBF12'] :
+                  currentLineChart === 'nab' ? ['#E31A1A'] :
+                    currentLineChart === 'otkl' ? ['#4318FF'] : []
+              ]}
+              motionConfig="gentle"
               margin={{top: 50, right: 160, bottom: 50, left: 60}}
               curve="catmullRom"
               enableCrosshair={false}
+              crosshairType="bottom-right"
               axisTop={null}
               axisRight={{
-                tickValues,
-                tickSize: 5,
-                tickPadding: 5,
+                tickValues: currentLineChart === 'otkl' ? [0, 10, 20, 30, 40, 50] : tickValues,
+                tickSize: 10,
+                tickPadding: 8,
                 tickRotation: 0,
                 format: '.2s',
-                legend: '',
-                legendOffset: 0,
-                min: minY,
               }}
               axisBottom={{
-                tickValues: xValues,
+                tickValues:
+                  data[currentLineChart === 'aab' ? 0 :
+                    currentLineChart === 'nab' ? 1 :
+                      currentLineChart === 'otkl' ? 2 : 0].data.map(point => point.x),
                 tickSize: 5,
                 tickPadding: 5,
-                tickRotation: 45,
+                tickRotation: -45,
                 format: value => value,
                 legendOffset: 36,
                 legendPosition: 'middle'
@@ -332,8 +357,8 @@ const Dashboard = () => {
               useMesh={true}
               yScale={{
                 type: 'linear',
-                min: 'auto',
-                max: tickValues[tickValues.length - 1],
+                min: currentLineChart === 'otkl' ? 0 : 'auto',
+                max: currentLineChart === 'otkl' ? 50 : tickValues[tickValues.length - 1],
                 stacked: false,
                 reverse: false
               }}
