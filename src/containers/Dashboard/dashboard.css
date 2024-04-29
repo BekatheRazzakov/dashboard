@@ -136,8 +136,69 @@
 }
 
 .percentage {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
   width: calc(25% - 24px);
   height: 345px;
+  padding: 23px 28px 36px;
+}
+
+.percentage-title {
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 36px;
+  color: var(--primary);
+}
+
+.percentage-percents {
+  display: flex;
+  justify-content: space-between;
+  box-shadow: 0 3px 8px 0 #0000001A;
+  padding: 12px 35px;
+  border-radius: 15px;
+}
+
+.percentage-percents-block {
+  display: flex;
+  flex-direction: column;
+  width: 65px;
+  text-align: center;
+}
+
+.percentage-percents-block span {
+  position: relative;
+}
+
+.percentage-percents-block:nth-child(1) span:nth-child(1)::before {
+  background-color: var(--green-main);
+}
+
+.percentage-percents-block:nth-child(2) span:nth-child(1)::before {
+  background-color: var(--red-main);
+}
+
+.percentage-percents-block span:nth-child(1) {
+  color: var(--hard);
+}
+
+.percentage-percents-block span:nth-child(1)::before {
+  position: absolute;
+  content: '';
+  top: 48%;
+  left: 2px;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: transparent;
+}
+
+.percentage-percents-block span:nth-child(2) {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--primary);
+  line-height: 22px;
 }
 
 .si-rating {
@@ -150,14 +211,13 @@
   gap: 17px;
   width: calc(50% - 24px);
   height: 385px;
-  padding: 30px;
+  padding: 30px 30px 0;
 }
 
 .abons-in-graphs-numbers {
   display: flex;
   flex-direction: column;
   min-width: 140px;
-  z-index: 1;
 }
 
 .abons-in-graphs-numbers .abons-in-numbers-date {
@@ -213,8 +273,6 @@
 .abons-chart {
   width: 100%;
   height: 100%;
-  transform: scale(1.15) translate(-10px, -12px);
-  z-index: 0;
 }
 
 .tariffs {

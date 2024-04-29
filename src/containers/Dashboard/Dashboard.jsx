@@ -1,10 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import DatePicker from "../../components/DatePicker/DatePicker";
 import {useAppDispatch, useAppSelector} from "../../app/hooks";
 import moment from "moment";
 import {setDateFieldName} from "../../features/dataSlice";
 import {fetchAbonsData} from "../../features/dataThunk";
 import {ResponsiveLine} from "@nivo/line";
+import {ResponsivePie} from '@nivo/pie'
 import './dashboard.css';
 
 const data = [
@@ -158,9 +159,10 @@ const Dashboard = () => {
     abonsNumDate: moment().subtract(1, 'days').format('DD.MM.YYYY'),
   });
   const [currentLineChart, setCurrentLineChart] = useState('aab');
-  const aabPercentage = Number(((abonsData.aab || 0) / (abonsData.oab || 0) * 100).toFixed(2));
-  const otkloneniePercentage = Number((aabPercentage - 90).toFixed(2));
-  const otklonenieKolvo = Number((((abonsData.oab || 0) / 100 * 90) / 100 * otkloneniePercentage).toFixed());
+  const aabPercentage = Number(((abonsData.aab || 0) / (abonsData.oab || 0) * 100).toFixed(2)) || 0;
+  const nabPercentage = Number(((abonsData.nab || 0) / (abonsData.oab || 0) * 100).toFixed(2)) || 0;
+  const otkloneniePercentage = Number((aabPercentage - 90).toFixed(2)) || 0;
+  const otklonenieKolvo = Number((((abonsData.oab || 0) / 100 * 90) / 100 * otkloneniePercentage).toFixed()) || 0;
   const minY = Math.min(...[data[
     currentLineChart === 'aab' ? 0 :
       currentLineChart === 'nab' ? 1 :
@@ -206,20 +208,18 @@ const Dashboard = () => {
         }));
       }
     } else if (dateFieldName === 'abonsNumDate') {
-      setState(prevState => ({
-        ...prevState,
-        abonsNumDate: value,
-      }));
+      dispatch(fetchAbonsData({date: value})).then(() => {
+        setState(prevState => ({
+          ...prevState,
+          abonsNumDate: value,
+        }));
+      });
     }
   };
 
   const formatNumber = (number) => {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
   };
-
-  useEffect(() => {
-    dispatch(fetchAbonsData({date: state.abonsNumDate}));
-  }, [dispatch, state.abonsNumDate]);
 
   return (
     <div className="dashboard">
@@ -269,7 +269,42 @@ const Dashboard = () => {
             changeHandler={changeHandler}
           />
         </div>
-        <div className="paper percentage"></div>
+        <div className="paper percentage">
+          <span className="percentage-title">Проценты</span>
+          <ResponsivePie
+            data={[
+              {
+                "id": "ААБ",
+                "label": "ААБ",
+                "value": abonsData.aab,
+              },
+              {
+                "id": "НАБ",
+                "label": "НАБ",
+                "value": abonsData.nab,
+              },
+            ]}
+            colors={['#1DBF12', '#E31A1A']}
+            margin={{top: 15, right: 0, bottom: 20, left: 0}}
+            height={203}
+            innerRadius={0.5}
+            cornerRadius={3}
+            activeOuterRadiusOffset={8}
+            arcLabelsTextColor='#FFFFFF'
+            enableArcLinkLabels={false}
+            tooltip={() => <div></div>}
+          />
+          <div className="percentage-percents">
+            <div className='percentage-percents-block'>
+              <span>ААБ</span>
+              <span>{aabPercentage}%</span>
+            </div>
+            <div className='percentage-percents-block'>
+              <span>НАБ</span>
+              <span>{nabPercentage}%</span>
+            </div>
+          </div>
+        </div>
         <div className="paper si-rating"></div>
         <div className="paper abons-in-graphs">
           <div className="abons-in-graphs-numbers">
@@ -315,7 +350,6 @@ const Dashboard = () => {
           </div>
           <div className="abons-chart">
             <ResponsiveLine
-              width={650}
               data={
                 currentLineChart === 'aab' ? [data[0]] :
                   currentLineChart === 'nab' ? [data[1]] :
@@ -327,7 +361,7 @@ const Dashboard = () => {
                     currentLineChart === 'otkl' ? ['#4318FF'] : []
               ]}
               motionConfig="gentle"
-              margin={{top: 50, right: 160, bottom: 50, left: 60}}
+              margin={{top: 10, right: 140, bottom: 60, left: 0}}
               curve="catmullRom"
               enableCrosshair={false}
               crosshairType="bottom-right"

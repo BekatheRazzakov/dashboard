@@ -5,6 +5,7 @@
   "dependencies": {
     "@nivo/bump": "^0.85.1",
     "@nivo/line": "^0.85.1",
+    "@nivo/pie": "^0.85.1",
     "@reduxjs/toolkit": "^2.2.3",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",

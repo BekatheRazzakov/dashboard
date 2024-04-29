@@ -79,6 +79,9 @@ const DatePicker = ({date1, date2, changeHandler}) => {
                   if (day.format('MMMM') !== currentMonthName) {
                     return 'month-day-not-current-month';
                   }
+                  if (day.format('DD.MM.YYYY') === moment().format('DD.MM.YYYY')) {
+                    return 'month-day-is-today';
+                  }
                 })()}`
               }
               key={i}

@@ -40,6 +40,10 @@
   z-index: 2;
 }
 
+.month-day-is-today .month-day-inner {
+  /*background-color: var(--green-secondary);*/
+}
+
 .month-day-selected .month-day-inner,
 .month-day-inner:hover {
   background-color: var(--primary);
