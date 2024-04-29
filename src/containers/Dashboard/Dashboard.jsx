@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import DatePicker from "../../components/DatePicker/DatePicker";
 import {useAppDispatch, useAppSelector} from "../../app/hooks";
 import moment from "moment";
@@ -6,6 +6,8 @@ import {setDateFieldName} from "../../features/dataSlice";
 import {fetchAbonsData} from "../../features/dataThunk";
 import {ResponsiveLine} from "@nivo/line";
 import {ResponsivePie} from '@nivo/pie'
+import calendarIcon from '../../assets/calendar.svg';
+import defaultAvatar from '../../assets/default-avatar.png';
 import './dashboard.css';
 
 const data = [
@@ -149,6 +151,45 @@ const data = [
   },
 ];
 
+const siRating = [
+  {
+    name: 'Маликов Кубан',
+    podkl: '200',
+    tp: '210',
+    dem: '34',
+  },
+  {
+    name: 'Айылчы Дуйшобаев',
+    podkl: '210',
+    tp: '12',
+    dem: '17',
+  },
+  {
+    name: 'Ренат Ренатов',
+    podkl: '199',
+    tp: '24',
+    dem: '34',
+  },
+  {
+    name: 'Абдырасул Абдырасулов',
+    podkl: '100',
+    tp: '75',
+    dem: '91',
+  },
+  {
+    name: 'Мурат Муратов',
+    podkl: '188',
+    tp: '56',
+    dem: '39',
+  },
+  {
+    name: 'Сталбек Солто уулу',
+    podkl: '163',
+    tp: '42',
+    dem: '185',
+  },
+];
+
 const Dashboard = () => {
   const dispatch = useAppDispatch();
   const dateFieldName = useAppSelector(state => state.dataState.dateFieldName);
@@ -158,6 +199,7 @@ const Dashboard = () => {
     periodDate2: moment().subtract(1, 'days').format('DD.MM.YYYY'),
     abonsNumDate: moment().subtract(1, 'days').format('DD.MM.YYYY'),
   });
+  const [siSortBy, setSiSortBy] = useState('podkl');
   const [currentLineChart, setCurrentLineChart] = useState('aab');
   const aabPercentage = Number(((abonsData.aab || 0) / (abonsData.oab || 0) * 100).toFixed(2)) || 0;
   const nabPercentage = Number(((abonsData.nab || 0) / (abonsData.oab || 0) * 100).toFixed(2)) || 0;
@@ -220,6 +262,12 @@ const Dashboard = () => {
   const formatNumber = (number) => {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
   };
+
+  useEffect(() => {
+    dispatch(fetchAbonsData({date: state.abonsNumDate}));
+  }, []);
+
+  console.log(siSortBy);
 
   return (
     <div className="dashboard">
@@ -305,7 +353,52 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
-        <div className="paper si-rating"></div>
+        <div className="paper si-rating">
+          <div style={{display: 'flex', justifyContent: 'space-between'}}>
+            <h2 className="si-rating-block-title">Рейтинг СИ</h2>
+            <div
+              className={`abons-in-numbers-date ${dateFieldName === 'abonsNumDate' ? 'abons-in-numbers-date-selected' : ''}`}
+              onClick={(e) => {
+                e.stopPropagation();
+                dispatch(setDateFieldName('abonsNumDate'));
+              }}
+            >
+              <img src={calendarIcon} alt="calendar"/>
+              {state.abonsNumDate ? moment(state.abonsNumDate, 'DD.MM.YYYY').format('MMMM') : '-'}
+            </div>
+          </div>
+          <div className="si-rating-titles">
+            <span className="si-rating-titles-fio">ФИО</span>
+            <span
+              className={`si-rating-titles-title ${siSortBy === 'podkl' ? 'si-rating-titles-title-selected' : ''}`}
+              onClick={() => setSiSortBy('podkl')}
+            >Подкл.</span>
+            <span
+              className={`si-rating-titles-title ${siSortBy === 'tp' ? 'si-rating-titles-title-selected' : ''}`}
+              onClick={() => setSiSortBy('tp')}
+            >ТП</span>
+            <span
+              className={`si-rating-titles-title ${siSortBy === 'dem' ? 'si-rating-titles-title-selected' : ''}`}
+              onClick={() => setSiSortBy('dem')}
+            >Дем</span>
+          </div>
+          <div className="si-rating-staff-list">
+            {
+              siRating.sort((a, b) => parseInt(b[siSortBy]) - parseInt(a[siSortBy]))
+                .map(si => (
+                <div className="si-rating-staff-item">
+                  <div style={{display: 'flex', gap: '9px', alignItems: 'center', flexGrow: 1, maxWidth: '210px'}}>
+                    <img src={defaultAvatar} alt="Сервис инженер"/>
+                    <span className="si-rating-staff-item-name">{si.name}</span>
+                  </div>
+                  <span className="si-rating-staff-item-number">{si.podkl}</span>
+                  <span className="si-rating-staff-item-number">{si.tp}</span>
+                  <span className="si-rating-staff-item-number">{si.dem}</span>
+                </div>
+              ))
+            }
+          </div>
+        </div>
         <div className="paper abons-in-graphs">
           <div className="abons-in-graphs-numbers">
             <div
