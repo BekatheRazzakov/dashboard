@@ -218,7 +218,8 @@
   margin: 0;
 }
 
-.si-rating .abons-in-numbers-date {
+.si-rating .abons-in-numbers-date,
+.tariffs .abons-in-numbers-date {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -367,7 +368,40 @@
   height: 100%;
 }
 
+.responsive-line-tooltip {
+  position: relative;
+  padding: 4px 16px 2px;
+  color: var(--surface);
+  border-radius: 8px;
+  text-align: center;
+}
+
+.responsive-line-tooltip-pointer {
+  content: '';
+  position: absolute;
+  top: 98%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+}
+
 .tariffs {
   width: 50%;
   height: 385px;
+  padding: 30px;
+}
+.percentage {
+  position: relative;
+}
+
+.tariffs .abons-in-numbers-date {
+  padding: 6px 13px;
+}
+
+.tariffs .abons-in-numbers-date span {
+  height: 16px;
+  line-height: 20px;
 }

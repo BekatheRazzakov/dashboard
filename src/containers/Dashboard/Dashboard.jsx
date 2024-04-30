@@ -6,9 +6,11 @@ import {setDateFieldName} from "../../features/dataSlice";
 import {fetchAbonsData} from "../../features/dataThunk";
 import {ResponsiveLine} from "@nivo/line";
 import {ResponsivePie} from '@nivo/pie'
+import {ResponsiveBar} from '@nivo/bar';
 import calendarIcon from '../../assets/calendar.svg';
 import defaultAvatar from '../../assets/default-avatar.png';
 import './dashboard.css';
+import axiosApi from "../../axiosApi";
 
 const data = [
   {
@@ -190,6 +192,54 @@ const siRating = [
   },
 ];
 
+const tariffData = [
+  {
+    id: 'Promo',
+    value1: 300,
+    value2: 5000
+  },
+  {
+    id: 'Promo 60',
+    value1: 280,
+    value2: 5150
+  },
+  {
+    id: 'Promo 70',
+    value1: 310,
+    value2: 5400
+  },
+  {
+    id: 'Promo 80',
+    value1: 200,
+    value2: 4470
+  },
+  {
+    id: 'Promo 90',
+    value1: 390,
+    value2: 6340
+  },
+  {
+    id: 'Promo 100',
+    value1: 250,
+    value2: 4975
+  },
+  {
+    id: 'Sky 90',
+    value1: 430,
+    value2: 6400
+  },
+  {
+    id: 'Sky 70',
+    value1: 220,
+    value2: 6800
+  },
+  {
+    id: 'Promo 20',
+    value1: 204,
+    value2: 6890
+  },
+];
+
 const Dashboard = () => {
   const dispatch = useAppDispatch();
   const dateFieldName = useAppSelector(state => state.dataState.dateFieldName);
@@ -199,6 +249,7 @@ const Dashboard = () => {
     periodDate2: moment().subtract(1, 'days').format('DD.MM.YYYY'),
     abonsNumDate: moment().subtract(1, 'days').format('DD.MM.YYYY'),
   });
+  const [abonsDataForPeriod, setAbonsDataForPeriod] = useState([]);
   const [siSortBy, setSiSortBy] = useState('podkl');
   const [currentLineChart, setCurrentLineChart] = useState('aab');
   const aabPercentage = Number(((abonsData.aab || 0) / (abonsData.oab || 0) * 100).toFixed(2)) || 0;
@@ -267,7 +318,17 @@ const Dashboard = () => {
     dispatch(fetchAbonsData({date: state.abonsNumDate}));
   }, []);
 
-  console.log(siSortBy);
+  useEffect(() => {
+    const getData = async (date) => {
+      const formData = new FormData();
+      formData.append('date_filter', date);
+      formData.append('squares_id', '7');
+      const req = await axiosApi.post('filtered_squares/', formData);
+      const res = await req.data;
+      console.log(res);
+    };
+    void getData(moment().subtract(1, 'days').format('YYYY-MM-DD'));
+  }, []);
 
   return (
     <div className="dashboard">
@@ -386,16 +447,16 @@ const Dashboard = () => {
             {
               siRating.sort((a, b) => parseInt(b[siSortBy]) - parseInt(a[siSortBy]))
                 .map(si => (
-                <div className="si-rating-staff-item">
-                  <div style={{display: 'flex', gap: '9px', alignItems: 'center', flexGrow: 1, maxWidth: '210px'}}>
-                    <img src={defaultAvatar} alt="Сервис инженер"/>
-                    <span className="si-rating-staff-item-name">{si.name}</span>
+                  <div className="si-rating-staff-item">
+                    <div style={{display: 'flex', gap: '9px', alignItems: 'center', flexGrow: 1, maxWidth: '210px'}}>
+                      <img src={defaultAvatar} alt="Сервис инженер"/>
+                      <span className="si-rating-staff-item-name">{si.name}</span>
+                    </div>
+                    <span className="si-rating-staff-item-number">{si.podkl}</span>
+                    <span className="si-rating-staff-item-number">{si.tp}</span>
+                    <span className="si-rating-staff-item-number">{si.dem}</span>
                   </div>
-                  <span className="si-rating-staff-item-number">{si.podkl}</span>
-                  <span className="si-rating-staff-item-number">{si.tp}</span>
-                  <span className="si-rating-staff-item-number">{si.dem}</span>
-                </div>
-              ))
+                ))
             }
           </div>
         </div>
@@ -438,7 +499,7 @@ const Dashboard = () => {
               <span
                 className={currentLineChart === 'otkl' ? "abon-type-otkl" : ''}
                 onClick={() => setCurrentLineChart('otkl')}
-              >Отклонение</span>
+              >Отклонение %</span>
             </div>
           </div>
           <div className="abons-chart">
@@ -492,11 +553,12 @@ const Dashboard = () => {
               yFormat={value => (value < minY ? null : value)}
               tooltip={({point}) => (
                 <div
+                  className="responsive-line-tooltip"
                   style={{
-                    background: point.color, padding: '4px 16px 2px',
-                    color: 'white', borderRadius: '8px', textAlign: 'center',
+                    background: point.color
                   }}
                 >
+                  <span className="responsive-line-tooltip-pointer" style={{borderTop: `6px solid ${point.color}`}} />
                   <div style={{fontSize: '12px', opacity: '0.7'}}>{point.data.x}</div>
                   <div style={{fontWeight: '700', lineHeight: '24px'}}>{point.data.y}</div>
                 </div>
@@ -504,7 +566,57 @@ const Dashboard = () => {
             />
           </div>
         </div>
-        <div className="paper tariffs"></div>
+        <div className="paper tariffs">
+          <div style={{display: 'flex', justifyContent: 'space-between'}}>
+            <h2 className="si-rating-block-title">Тарифы</h2>
+            <div
+              className={`abons-in-numbers-date ${dateFieldName === 'abonsNumDate' ? 'abons-in-numbers-date-selected' : ''}`}
+              onClick={(e) => {
+                e.stopPropagation();
+                dispatch(setDateFieldName('abonsNumDate'));
+              }}
+            >
+              <img src={calendarIcon} alt="calendar"/>
+              <span>{state.abonsNumDate ? moment(state.abonsNumDate, 'DD.MM.YYYY').format('DD.MM.YYYY') : '-'}</span>
+            </div>
+          </div>
+          <ResponsiveBar
+            data={tariffData}
+            keys={['value1', 'value2']}
+            indexBy="id"
+            margin={{top: 50, right: 37, bottom: 50, left: 0}}
+            padding={0.7}
+            borderRadius={3}
+            colors={['#E31A1A', '#1DBF12']}
+            borderColor={{from: 'color', modifiers: [['darker', 1.6]]}}
+            axisTop={null}
+            axisLeft={null}
+            axisRight={{
+              tickSize: 5,
+              tickPadding: 5,
+              tickRotation: 0,
+            }}
+            axisBottom={{
+              tickSize: 5,
+              tickPadding: 5,
+              tickRotation: 0,
+            }}
+            labelSkipWidth={12}
+            labelSkipHeight={12}
+            labelTextColor={{from: 'color', modifiers: [['darker', 1.6]]}}
+            legends={[]}
+            animate={true}
+            motionStiffness={90}
+            motionDamping={15}
+            enableLabel={false}
+            tooltip={({data}) => (
+              <div style={{background: 'white', padding: '7px', boxShadow: '1px 2px 6px -2px black'}}>
+                <div>НАБ: {data.value1}</div>
+                <div>ААБ: {data.value2}</div>
+              </div>
+            )}
+          />
+        </div>
       </div>
     </div>
   );
