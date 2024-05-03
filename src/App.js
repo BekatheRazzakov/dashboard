@@ -1,4 +1,4 @@
-import {Route, Routes} from "react-router-dom";
+import {Navigate, Route, Routes} from "react-router-dom";
 import Menu from "./components/Menu/Menu";
 import Dashboard from "./containers/Dashboard/Dashboard";
 import {useEffect} from "react";
@@ -7,6 +7,7 @@ import moment from "moment";
 import 'moment/locale/ru';
 import {setDropdown} from "./features/dataSlice";
 import './App.css';
+import Regions from "./containers/Regions/Regions";
 
 moment.locale('ru');
 
@@ -23,7 +24,9 @@ const App = () => {
     <div className="App">
       <Menu/>
       <Routes>
-        <Route path='*' element={<Dashboard/>}/>
+        <Route path='*' element={<Navigate to="/statistics" replace/>}/>
+        <Route path='statistics' element={<Dashboard/>}/>
+        <Route path='regions' element={<Regions/>}/>
       </Routes>
     </div>
   );

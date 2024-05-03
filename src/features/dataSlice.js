@@ -9,6 +9,8 @@ const initialState = {
     nab: 0,
   },
   currentDropDown: '',
+  currentTab: 'stat',
+  currentRegion: '',
   dateFieldName: 'abonsNumDate',
 };
 
@@ -19,9 +21,15 @@ const DataSlice = createSlice({
     setDropdown: (state, action) => {
       state.currentDropDown = action.payload;
     },
+    setTab: (state, action) => {
+      state.currentTab = action.payload;
+    },
+    setRegion: (state, action) => {
+      state.currentRegion = action.payload;
+    },
     setDateFieldName: (state, action) => {
       state.dateFieldName = action.payload;
-    }
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchAbonsData.pending, (state) => {
@@ -42,4 +50,4 @@ const DataSlice = createSlice({
 });
 
 export const dataReducer = DataSlice.reducer;
-export const {setDateFieldName, setDropdown} = DataSlice.actions;
+export const {setDateFieldName, setDropdown, setTab, setRegion} = DataSlice.actions;

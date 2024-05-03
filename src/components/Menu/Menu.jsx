@@ -1,13 +1,18 @@
-import React, {useState} from 'react';
+import React from 'react';
 import logo from '../../assets/dashboard-logo.svg';
 import {ReactComponent as Donut} from '../../assets/donut-graph.svg';
 import {ReactComponent as Earth} from '../../assets/earth.svg';
 import {ReactComponent as Location} from '../../assets/location.svg';
 import {ReactComponent as Arrow} from '../../assets/arrow-right.svg';
 import './menu.css';
+import {useAppDispatch, useAppSelector} from "../../app/hooks";
+import {setTab} from "../../features/dataSlice";
+import {useNavigate} from "react-router-dom";
 
 const Menu = () => {
-  const [currentMenu, setCurrentMenu] = useState('stat');
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const currentMenu = useAppSelector(state => state.dataState.currentTab);
 
   return (
     <div className="menu">
@@ -16,24 +21,42 @@ const Menu = () => {
         <span>Dashboard</span>
       </div>
       <div className="menu-items">
-        <div className={`menu-item ${currentMenu === 'stat' ? 'menu-item-selected' : ''}`} onClick={() => setCurrentMenu('stat')}>
+        <div
+          className={`menu-item ${currentMenu === 'stat' ? 'menu-item-selected' : ''}`}
+          onClick={() => {
+            dispatch(setTab('stat'));
+            navigate('statistics');
+          }}
+        >
           <span className="menu-item-inner">
-            <Donut />
+            <Donut/>
             Статистика
           </span>
         </div>
-        <div className={`menu-item ${currentMenu === 'reg' ? 'menu-item-selected' : ''}`} onClick={() => setCurrentMenu('reg')}>
+        <div
+          className={`menu-item ${currentMenu === 'reg' ? 'menu-item-selected' : ''}`}
+          onClick={() => {
+            dispatch(setTab('reg'));
+            navigate('regions');
+          }}
+        >
           <span className="menu-item-inner">
-            <Earth />
+            <Earth/>
             Регионы
           </span>
         </div>
-        <div className={`menu-item ${currentMenu === 'loc' ? 'menu-item-selected' : ''}`} onClick={() => setCurrentMenu('loc')}>
+        <div
+          className={`menu-item ${currentMenu === 'loc' ? 'menu-item-selected' : ''}`}
+          onClick={() => {
+            dispatch(setTab('loc'));
+            navigate('regions');
+          }}
+        >
           <span className="menu-item-inner">
-            <Location />
+            <Location/>
             Квадрат
             <div className="menu-item-location">
-              <Arrow />
+              <Arrow/>
             </div>
           </span>
         </div>

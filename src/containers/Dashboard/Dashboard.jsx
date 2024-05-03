@@ -318,23 +318,11 @@ const Dashboard = () => {
     dispatch(fetchAbonsData({date: state.abonsNumDate}));
   }, []);
 
-  useEffect(() => {
-    const getData = async (date) => {
-      const formData = new FormData();
-      formData.append('date_filter', date);
-      formData.append('squares_id', '7');
-      const req = await axiosApi.post('filtered_squares/', formData);
-      const res = await req.data;
-      console.log(res);
-    };
-    void getData(moment().subtract(1, 'days').format('YYYY-MM-DD'));
-  }, []);
-
   return (
     <div className="dashboard">
       <div className="dashboard-header">
-        <span className="pwd">Страницы / Регионы</span>
-        <span className="current-page-name">Регионы</span>
+        <span className="pwd">Страницы / Статистика</span>
+        <span className="current-page-name">Статистика</span>
       </div>
       <div className="statistics">
         <div
@@ -368,6 +356,8 @@ const Dashboard = () => {
             <span className="abons-card-value">{otkloneniePercentage}%</span>
           </div>
         </div>
+
+
         <div className="paper date-picker-block">
           <DatePicker
             date1={
@@ -378,6 +368,8 @@ const Dashboard = () => {
             changeHandler={changeHandler}
           />
         </div>
+
+
         <div className="paper percentage">
           <span className="percentage-title">Проценты</span>
           <ResponsivePie
@@ -414,6 +406,8 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
+
+
         <div className="paper si-rating">
           <div style={{display: 'flex', justifyContent: 'space-between'}}>
             <h2 className="si-rating-block-title">Рейтинг СИ</h2>
@@ -460,6 +454,8 @@ const Dashboard = () => {
             }
           </div>
         </div>
+
+
         <div className="paper abons-in-graphs">
           <div className="abons-in-graphs-numbers">
             <div
@@ -502,6 +498,8 @@ const Dashboard = () => {
               >Отклонение %</span>
             </div>
           </div>
+
+
           <div className="abons-chart">
             <ResponsiveLine
               data={
@@ -515,7 +513,7 @@ const Dashboard = () => {
                     currentLineChart === 'otkl' ? ['#4318FF'] : []
               ]}
               motionConfig="gentle"
-              margin={{top: 10, right: 140, bottom: 60, left: 0}}
+              margin={{top: 10, right: 45, bottom: 60, left: 0}}
               curve="catmullRom"
               enableCrosshair={false}
               crosshairType="bottom-right"
@@ -566,6 +564,8 @@ const Dashboard = () => {
             />
           </div>
         </div>
+
+
         <div className="paper tariffs">
           <div style={{display: 'flex', justifyContent: 'space-between'}}>
             <h2 className="si-rating-block-title">Тарифы</h2>
