@@ -11,6 +11,7 @@ import calendarIcon from '../../assets/calendar.svg';
 import defaultAvatar from '../../assets/default-avatar.png';
 import './dashboard.css';
 import axiosApi from "../../axiosApi";
+import {Tooltip} from "chart.js";
 
 const data = [
   {
@@ -388,10 +389,11 @@ const Dashboard = () => {
             colors={['#1DBF12', '#E31A1A']}
             margin={{top: 15, right: 0, bottom: 20, left: 0}}
             height={203}
-            innerRadius={0.5}
+            innerRadius={0.6}
             cornerRadius={3}
             activeOuterRadiusOffset={8}
             arcLabelsTextColor='#FFFFFF'
+            enableArcLabels={false}
             enableArcLinkLabels={false}
             tooltip={() => <div></div>}
           />
@@ -556,7 +558,7 @@ const Dashboard = () => {
                     background: point.color
                   }}
                 >
-                  <span className="responsive-line-tooltip-pointer" style={{borderTop: `6px solid ${point.color}`}} />
+                  <span className="responsive-line-tooltip-pointer" style={{borderTop: `6px solid ${point.color}`}}/>
                   <div style={{fontSize: '12px', opacity: '0.7'}}>{point.data.x}</div>
                   <div style={{fontWeight: '700', lineHeight: '24px'}}>{point.data.y}</div>
                 </div>
@@ -610,9 +612,41 @@ const Dashboard = () => {
             motionDamping={15}
             enableLabel={false}
             tooltip={({data}) => (
-              <div style={{background: 'white', padding: '7px', boxShadow: '1px 2px 6px -2px black'}}>
-                <div>НАБ: {data.value1}</div>
-                <div>ААБ: {data.value2}</div>
+              <div className="tariffs-tooltip">
+                <div className="tariffs-tooltip-pointer" />
+                <div className="tariffs-tooltip-pie-block">
+                  <span className="tariffs-tooltip-title">{data.id}</span>
+                  <div className="tariffs-tooltip-pie">
+                    <ResponsivePie
+                      data={[
+                        {id: 'ААБ', value: data.value2},
+                        {id: 'НАБ', value: data.value1},
+                      ]}
+                      height={80}
+                      width={170}
+                      innerRadius={0.65}
+                      colors={['#1DBF12', '#E31A1A',]}
+                      borderColor={{from: 'color', modifiers: [['darker', 0.2]]}}
+                      enableSliceLabels={false}
+                      isInteractive={false}
+                      enableArcLabels={false}
+                      enableArcLinkLabels={false}
+                    />
+                  </div>
+                  <div className="tariffs-tooltip-stats">
+                    <div className="tariffs-tooltip-stats-inner">
+                      <span>ААБ</span>
+                      <span>{Number(((data.value2 || 0) / ((data.value1 + data.value2) || 0) * 100).toFixed(1) || 0)}%</span>
+                      <span>{data.value2}</span>
+                    </div>
+                    <div className="tariffs-tooltip-stats-divider"/>
+                    <div className="tariffs-tooltip-stats-inner">
+                      <span>НАБ</span>
+                      <span>{Number(((data.value1 || 0) / ((data.value1 + data.value2) || 0) * 100).toFixed(1) || 0)}%</span>
+                      <span>{data.value1}</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             )}
           />
