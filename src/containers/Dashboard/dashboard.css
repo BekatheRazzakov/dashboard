@@ -6,6 +6,7 @@
 }
 
 .paper {
+  position: relative;
   border-radius: 20px;
   background: var(--surface);
   overflow: hidden;
@@ -29,6 +30,7 @@
 }
 
 .statistics {
+  position: relative;
   display: flex;
   gap: 24px;
   flex-wrap: wrap;

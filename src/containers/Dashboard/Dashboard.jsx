@@ -10,8 +10,7 @@ import {ResponsiveBar} from '@nivo/bar';
 import calendarIcon from '../../assets/calendar.svg';
 import defaultAvatar from '../../assets/default-avatar.png';
 import './dashboard.css';
-import axiosApi from "../../axiosApi";
-import {Tooltip} from "chart.js";
+import CoverLoader from "../../components/CoverLoader/CoverLoader";
 
 const data = [
   {
@@ -250,9 +249,9 @@ const Dashboard = () => {
     periodDate2: moment().subtract(1, 'days').format('DD.MM.YYYY'),
     abonsNumDate: moment().subtract(1, 'days').format('DD.MM.YYYY'),
   });
-  const [abonsDataForPeriod, setAbonsDataForPeriod] = useState([]);
   const [siSortBy, setSiSortBy] = useState('podkl');
   const [currentLineChart, setCurrentLineChart] = useState('aab');
+  const [fetchAbonDataLoading, setFetchAbonDataLoading] = useState(false);
   const aabPercentage = Number(((abonsData.aab || 0) / (abonsData.oab || 0) * 100).toFixed(2)) || 0;
   const nabPercentage = Number(((abonsData.nab || 0) / (abonsData.oab || 0) * 100).toFixed(2)) || 0;
   const otkloneniePercentage = Number((aabPercentage - 90).toFixed(2)) || 0;
@@ -302,11 +301,13 @@ const Dashboard = () => {
         }));
       }
     } else if (dateFieldName === 'abonsNumDate') {
+      setFetchAbonDataLoading(true);
       dispatch(fetchAbonsData({date: value})).then(() => {
         setState(prevState => ({
           ...prevState,
           abonsNumDate: value,
         }));
+        setFetchAbonDataLoading(false);
       });
     }
   };
@@ -316,7 +317,9 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
+    setFetchAbonDataLoading(true);
     dispatch(fetchAbonsData({date: state.abonsNumDate}));
+    setFetchAbonDataLoading(false);
   }, []);
 
   return (
@@ -329,6 +332,7 @@ const Dashboard = () => {
         <div
           className="paper abons-in-numbers"
         >
+          {fetchAbonDataLoading && <CoverLoader/>}
           <div
             className={`abons-in-numbers-date ${dateFieldName === 'abonsNumDate' ? 'abons-in-numbers-date-selected' : ''}`}
             onClick={(e) => {
@@ -372,6 +376,7 @@ const Dashboard = () => {
 
 
         <div className="paper percentage">
+          {fetchAbonDataLoading && <CoverLoader/>}
           <span className="percentage-title">Проценты</span>
           <ResponsivePie
             data={[
@@ -588,6 +593,7 @@ const Dashboard = () => {
             indexBy="id"
             margin={{top: 50, right: 37, bottom: 50, left: 0}}
             padding={0.7}
+            height={313}
             borderRadius={3}
             colors={['#E31A1A', '#1DBF12']}
             borderColor={{from: 'color', modifiers: [['darker', 1.6]]}}
@@ -613,7 +619,7 @@ const Dashboard = () => {
             enableLabel={false}
             tooltip={({data}) => (
               <div className="tariffs-tooltip">
-                <div className="tariffs-tooltip-pointer" />
+                <div className="tariffs-tooltip-pointer"/>
                 <div className="tariffs-tooltip-pie-block">
                   <span className="tariffs-tooltip-title">{data.id}</span>
                   <div className="tariffs-tooltip-pie">
