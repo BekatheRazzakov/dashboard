@@ -1,8 +1,10 @@
 .dashboard {
-  padding: 20px 24px 0;
+  position: relative;
+  padding: 20px 24px;
   flex-grow: 1;
-  margin-left: 312px;
   background-color: #F3F3F3;
+  box-sizing: border-box;
+  margin-left: 312px;
 }
 
 .paper {

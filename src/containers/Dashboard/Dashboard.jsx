@@ -240,7 +240,7 @@ const tariffData = [
   },
 ];
 
-const Dashboard = () => {
+const Dashboard = ({style}) => {
   const dispatch = useAppDispatch();
   const dateFieldName = useAppSelector(state => state.dataState.dateFieldName);
   const abonsData = useAppSelector(state => state.dataState.abonsData);
@@ -323,7 +323,7 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <div className="dashboard">
+    <div className="dashboard" style={{...style, minHeight: window.innerHeight + 'px'}}>
       <div className="dashboard-header">
         <span className="pwd">Страницы / Статистика</span>
         <span className="current-page-name">Статистика</span>
@@ -526,11 +526,9 @@ const Dashboard = () => {
               crosshairType="bottom-right"
               axisTop={null}
               axisRight={{
-                tickValues: currentLineChart === 'otkl' ? [0, 10, 20, 30, 40, 50] : tickValues,
                 tickSize: 10,
                 tickPadding: 8,
                 tickRotation: 0,
-                format: '.2s',
               }}
               axisBottom={{
                 tickValues:
@@ -545,13 +543,15 @@ const Dashboard = () => {
                 legendPosition: 'middle'
               }}
               axisLeft={null}
-              pointBorderWidth={1}
+              lineWidth={3}
+              pointBorderWidth={2}
+              pointSize={8}
               enableTouchCrosshair={true}
               useMesh={true}
               yScale={{
                 type: 'linear',
                 min: currentLineChart === 'otkl' ? 0 : 'auto',
-                max: currentLineChart === 'otkl' ? 50 : tickValues[tickValues.length - 1],
+                max: tickValues[tickValues.length - 1],
                 stacked: false,
                 reverse: false
               }}

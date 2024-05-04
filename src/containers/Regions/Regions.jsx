@@ -2,6 +2,7 @@ import React from 'react';
 import './regions.css';
 import {useAppDispatch, useAppSelector} from "../../app/hooks";
 import {setRegion} from "../../features/dataSlice";
+import Dashboard from "../Dashboard/Dashboard";
 
 const Regions = () => {
   const dispatch = useAppDispatch();
@@ -60,6 +61,7 @@ const Regions = () => {
           </svg>
         </div>
       </div>
+      <Dashboard style={{marginLeft: '0'}}/>
     </div>
   );
 };
