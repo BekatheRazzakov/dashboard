@@ -44,3 +44,116 @@
   stroke: #BFBFBF;
   fill: var(--surface);
 }
+
+.regions-tooltip-block {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+}
+
+.regions-tooltip {
+  top: -10px;
+  position: relative;
+  background-color: var(--surface);
+  width: 170px;
+  border-radius: 20px;
+  padding: 5px 10px;
+  box-shadow: 0 10px 32px 0 #0000001A;
+}
+
+.regions-tooltip-pointer {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  width: 40px;
+  height: 40px;
+  transform: translate(-70%, -50%) rotate(45deg);
+  background-color: var(--surface);
+  z-index: 0;
+}
+
+.regions-tooltip-pie-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.regions-tooltip-title {
+  display: inline-block;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--primary);
+  line-height: 27px;
+}
+
+.regions-tooltip-pie {
+  display: flex;
+  align-items: center;
+  height: 90px;
+  width: 100%;
+  margin-top: 5px;
+}
+
+.regions-tooltip-stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  padding: 12px 14px;
+  border-radius: 15px;
+  width: 80%;
+  margin-bottom: 5px;
+  box-shadow: 0 3px 8px 0 #0000001A;
+}
+
+.regions-tooltip-stats-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 12px;
+  width: 55px;
+  padding-left: 13px;
+  box-sizing: border-box;
+}
+
+.regions-tooltip-stats-divider {
+  width: 1px;
+  background-color: var(--secondary);
+}
+
+.regions-tooltip-stats-inner span:first-child {
+  position: relative;
+  color: var(--hard);
+}
+
+.regions-tooltip-stats-inner span:nth-child(2) {
+  color: var(--green-main);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.regions-tooltip-stats-inner:last-child span:nth-child(2) {
+  color: var(--red-main);
+}
+
+.regions-tooltip-stats-inner span:nth-child(3) {
+  color: var(--primary);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.regions-tooltip-stats-inner span:first-child::before {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: -13px;
+  width: 6px;
+  height: 6px;
+  background-color: var(--green-main);
+  border-radius: 50%;
+}
+
+.regions-tooltip-stats-inner:last-child span:first-child::before {
+  background-color: var(--red-main);
+}
