@@ -240,7 +240,7 @@ const tariffData = [
   },
 ];
 
-const Dashboard = ({style}) => {
+const Dashboard = ({style, title}) => {
   const dispatch = useAppDispatch();
   const dateFieldName = useAppSelector(state => state.dataState.dateFieldName);
   const abonsData = useAppSelector(state => state.dataState.abonsData);
@@ -326,7 +326,7 @@ const Dashboard = ({style}) => {
     <div className="dashboard" style={{...style, minHeight: window.innerHeight + 'px'}}>
       <div className="dashboard-header">
         <span className="pwd">Страницы / Статистика</span>
-        <span className="current-page-name">Статистика</span>
+        <span className="current-page-name">{title || 'Статистика'}</span>
       </div>
       <div className="statistics">
         <div

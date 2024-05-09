@@ -48,8 +48,8 @@ const Regions = () => {
       <div className="regions" ref={regionsRef}>
         <div className="map-container">
           <div className="dashboard-header">
-            <span className="pwd">Страницы / Регионыы</span>
-            <span className="current-page-name">{currentRegion || 'Регионы'}</span>
+            <span className="pwd">Страницы / Регионы</span>
+            <span className="current-page-name">Регионы</span>
           </div>
           <div className="regions-map" ref={regionsMapRef} onMouseLeave={() => setMouseIsOnMap(false)}>
             {
@@ -150,6 +150,7 @@ const Regions = () => {
             marginLeft: '0', borderTopLeftRadius: '20px', borderTopRightRadius: '20px',
             boxShadow: '0 -8px 34px 0 #0000001A', border: '1px solid #E1E4E6'
           }}
+          title={currentRegion}
         />
       </div>
     </>
