@@ -3,155 +3,14 @@ import DatePicker from "../../components/DatePicker/DatePicker";
 import {useAppDispatch, useAppSelector} from "../../app/hooks";
 import moment from "moment";
 import {setDateFieldName} from "../../features/dataSlice";
-import {fetchAbonsData} from "../../features/dataThunk";
+import { fetchAbonsData, fetchAbonsDataArray } from "../../features/dataThunk";
 import {ResponsiveLine} from "@nivo/line";
 import {ResponsivePie} from '@nivo/pie'
 import {ResponsiveBar} from '@nivo/bar';
 import calendarIcon from '../../assets/calendar.svg';
 import defaultAvatar from '../../assets/default-avatar.png';
-import './dashboard.css';
 import CoverLoader from "../../components/CoverLoader/CoverLoader";
-
-const data = [
-  {
-    "id": "ААБ",
-    "color": '#1DBF12',
-    "data": [
-      {
-        "x": 'Апр 13',
-        "y": "3054"
-      },
-      {
-        "x": 'Апр 14',
-        "y": "3708"
-      },
-      {
-        "x": 'Апр 15',
-        "y": "3690"
-      },
-      {
-        "x": 'Апр 16',
-        "y": "3560"
-      },
-      {
-        "x": 'Апр 17',
-        "y": "3800"
-      },
-      {
-        "x": 'Апр 18',
-        "y": "3850"
-      },
-      {
-        "x": 'Апр 19',
-        "y": "3825"
-      },
-      {
-        "x": 'Апр 20',
-        "y": "3900"
-      },
-      {
-        "x": 'Апр 21',
-        "y": "3930"
-      },
-      {
-        "x": 'Апр 22',
-        "y": "3870"
-      },
-      {
-        "x": 'Апр 23',
-        "y": "3890"
-      },
-      {
-        "x": 'Апр 24',
-        "y": "3920"
-      },
-    ],
-  },
-  {
-    "id": "НАБ",
-    "color": '#E31A1A',
-    "data": [
-      {
-        "x": 'Апр 15',
-        "y": "567"
-      },
-      {
-        "x": 'Апр 16',
-        "y": "550"
-      },
-      {
-        "x": 'Апр 17',
-        "y": "545"
-      },
-      {
-        "x": 'Апр 18',
-        "y": "557"
-      },
-      {
-        "x": 'Апр 19',
-        "y": "540"
-      },
-      {
-        "x": 'Апр 20',
-        "y": "530"
-      },
-      {
-        "x": 'Апр 21',
-        "y": "538"
-      },
-      {
-        "x": 'Апр 22',
-        "y": "500"
-      },
-      {
-        "x": 'Апр 23',
-        "y": "490"
-      }
-    ],
-  },
-  {
-    "id": "Отклонение",
-    "color": '#4318FF',
-    "data": [
-      {
-        "x": 'Апр 15',
-        "y": "13"
-      },
-      {
-        "x": 'Апр 16',
-        "y": "12.5"
-      },
-      {
-        "x": 'Апр 17',
-        "y": "12.8"
-      },
-      {
-        "x": 'Апр 18',
-        "y": "11.2"
-      },
-      {
-        "x": 'Апр 19',
-        "y": "11.9"
-      },
-      {
-        "x": 'Апр 20',
-        "y": "13"
-      },
-      {
-        "x": 'Апр 21',
-        "y": "13.5"
-      },
-      {
-        "x": 'Апр 22',
-        "y": "12.4"
-      },
-      {
-        "x": 'Апр 23',
-        "y": "12"
-      }
-    ],
-  },
-];
+import './dashboard.css';
 
 const siRating = [
   {
@@ -244,6 +103,9 @@ const Dashboard = ({style, title}) => {
   const dispatch = useAppDispatch();
   const dateFieldName = useAppSelector(state => state.dataState.dateFieldName);
   const abonsData = useAppSelector(state => state.dataState.abonsData);
+  const currentSquare = useAppSelector(state => state.dataState.currentSquare);
+  const abonsDataArray = useAppSelector(state => state.dataState.abonsDataArray);
+  const abonsDataArrayLoading = useAppSelector(state => state.dataState.abonsDataArrayLoading);
   const [state, setState] = useState({
     periodDate1: moment().subtract(7, 'days').format('DD.MM.YYYY'),
     periodDate2: moment().subtract(1, 'days').format('DD.MM.YYYY'),
@@ -256,12 +118,12 @@ const Dashboard = ({style, title}) => {
   const nabPercentage = Number(((abonsData.nab || 0) / (abonsData.oab || 0) * 100).toFixed(2)) || 0;
   const otkloneniePercentage = Number((aabPercentage - 90).toFixed(2)) || 0;
   const otklonenieKolvo = Number((((abonsData.oab || 0) / 100 * 90) / 100 * otkloneniePercentage).toFixed()) || 0;
-  const minY = Math.min(...[data[
+  const minY = Math.min(...[abonsDataArray[
     currentLineChart === 'aab' ? 0 :
       currentLineChart === 'nab' ? 1 :
         currentLineChart === 'otkl' ? 2 : 0
     ]].flatMap(series => series.data.map(d => parseInt(d.y))));
-  const maxY = Math.max(...[data[
+  const maxY = Math.max(...[abonsDataArray[
     currentLineChart === 'aab' ? 0 :
       currentLineChart === 'nab' ? 1 :
         currentLineChart === 'otkl' ? 2 : 0
@@ -301,14 +163,10 @@ const Dashboard = ({style, title}) => {
         }));
       }
     } else if (dateFieldName === 'abonsNumDate') {
-      setFetchAbonDataLoading(true);
-      dispatch(fetchAbonsData({date: value})).then(() => {
-        setState(prevState => ({
-          ...prevState,
-          abonsNumDate: value,
-        }));
-        setFetchAbonDataLoading(false);
-      });
+      setState(prevState => ({
+        ...prevState,
+        abonsNumDate: value,
+      }));
     }
   };
 
@@ -317,11 +175,28 @@ const Dashboard = ({style, title}) => {
   };
 
   useEffect(() => {
-    setFetchAbonDataLoading(true);
-    dispatch(fetchAbonsData({date: state.abonsNumDate}));
-    setFetchAbonDataLoading(false);
-  }, []);
-
+    const getData = async () => {
+      setFetchAbonDataLoading(true);
+      await dispatch(fetchAbonsData({date: state.abonsNumDate, square: currentSquare?.id || 19}));
+      setFetchAbonDataLoading(false);
+    };
+    void getData();
+  }, [currentSquare, dispatch, state.abonsNumDate]);
+  
+  useEffect(() => {
+    if (state.periodDate1 && state.periodDate2) {
+      let startDate = moment(state.periodDate1, "DD.MM.YYYY");
+      let endDate = moment(state.periodDate2, "DD.MM.YYYY");
+      let dates = [];
+      
+      while (startDate <= endDate) {
+        dates.push(startDate.format("DD.MM.YYYY"));
+        startDate = startDate.add(1, 'days');
+      }
+      dispatch(fetchAbonsDataArray({dates, square: currentSquare?.id || 19}))
+    }
+  }, [currentSquare?.id, dispatch, state.periodDate1, state.periodDate2]);
+  
   return (
     <div className="dashboard" style={{...style, minHeight: window.innerHeight + 'px'}}>
       <div className="dashboard-header">
@@ -508,11 +383,13 @@ const Dashboard = ({style, title}) => {
 
 
           <div className="abons-chart">
+            {abonsDataArrayLoading && <CoverLoader/>}
             <ResponsiveLine
               data={
-                currentLineChart === 'aab' ? [data[0]] :
-                  currentLineChart === 'nab' ? [data[1]] :
-                    currentLineChart === 'otkl' ? [data[2]] : []
+                !!abonsDataArray[0]['data'].length &&
+                currentLineChart === 'aab' ? [abonsDataArray[0]] :
+                  currentLineChart === 'nab' ? [abonsDataArray[1]] :
+                    currentLineChart === 'otkl' ? [abonsDataArray[2]] : []
               }
               colors={[
                 currentLineChart === 'aab' ? ['#1DBF12'] :
@@ -520,7 +397,7 @@ const Dashboard = ({style, title}) => {
                     currentLineChart === 'otkl' ? ['#4318FF'] : []
               ]}
               motionConfig="gentle"
-              margin={{top: 10, right: 45, bottom: 60, left: 0}}
+              margin={{top: 30, right: 45, bottom: 30, left: 0}}
               curve="catmullRom"
               enableCrosshair={false}
               crosshairType="bottom-right"
@@ -530,18 +407,7 @@ const Dashboard = ({style, title}) => {
                 tickPadding: 8,
                 tickRotation: 0,
               }}
-              axisBottom={{
-                tickValues:
-                  data[currentLineChart === 'aab' ? 0 :
-                    currentLineChart === 'nab' ? 1 :
-                      currentLineChart === 'otkl' ? 2 : 0].data.map(point => point.x),
-                tickSize: 5,
-                tickPadding: 5,
-                tickRotation: -45,
-                format: value => value,
-                legendOffset: 36,
-                legendPosition: 'middle'
-              }}
+              axisBottom={null}
               axisLeft={null}
               lineWidth={3}
               pointBorderWidth={2}
@@ -550,7 +416,7 @@ const Dashboard = ({style, title}) => {
               useMesh={true}
               yScale={{
                 type: 'linear',
-                min: currentLineChart === 'otkl' ? 0 : 'auto',
+                min: 'auto',
                 max: tickValues[tickValues.length - 1],
                 stacked: false,
                 reverse: false
@@ -563,9 +429,9 @@ const Dashboard = ({style, title}) => {
                     background: point.color
                   }}
                 >
-                  <span className="responsive-line-tooltip-pointer" style={{borderTop: `6px solid ${point.color}`}}/>
-                  <div style={{fontSize: '12px', opacity: '0.7'}}>{point.data.x}</div>
-                  <div style={{fontWeight: '700', lineHeight: '24px'}}>{point.data.y}</div>
+                  <span className="responsive-line-tooltip-pointer" style={{borderTop: `6px solid ${point['color']}`}}/>
+                  <div style={{fontSize: '12px', opacity: '0.7'}}>{point['data']['x']}</div>
+                  <div style={{fontWeight: '700', lineHeight: '24px'}}>{point['data']['y'].toFixed(2)}</div>
                 </div>
               )}
             />

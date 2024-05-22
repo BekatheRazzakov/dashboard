@@ -7,6 +7,7 @@
   border-right: 1px solid #E1E4E6;
   background-color: var(--secondary);
   z-index: 11;
+  overflow-y: scroll;
 }
 
 .logo {
@@ -77,4 +78,43 @@
 
 .menu-item-selected .menu-item-location path {
   fill: var(--surface);
+}
+
+.menu-item-squares {
+  margin-top: 10px;
+}
+
+.menu-item-region {
+  font-size: 18px;
+  font-weight: 500;
+  padding-left: 45px;
+}
+
+.menu-item-region-square {
+  font-size: 15px;
+  font-weight: 500;
+  padding-left: 60px;
+}
+
+.menu-item-region svg {
+  fill: var(--primary);
+  transition: transform 0.2s;
+}
+
+.menu-item-selected .menu-item-region svg {
+  fill: var(--surface);
+  stroke: none;
+  transform: rotate(90deg);
+}
+
+.menu-item-selected .menu-item-region path {
+  stroke: none;
+}
+
+.region-squares {
+  margin-top: 5px;
+}
+
+.region-squares .menu-item {
+  padding: 5px 20px;
 }
