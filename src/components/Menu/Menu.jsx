@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import logo from '../../assets/dashboard-logo.svg';
+import logo from '../../assets/dashboard-logo.png';
 import { ReactComponent as Donut } from '../../assets/donut-graph.svg';
 import { ReactComponent as Earth } from '../../assets/earth.svg';
 import { ReactComponent as Location } from '../../assets/location.svg';

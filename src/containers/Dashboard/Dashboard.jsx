@@ -430,8 +430,9 @@ const Dashboard = ({style, title}) => {
                   }}
                 >
                   <span className="responsive-line-tooltip-pointer" style={{borderTop: `6px solid ${point['color']}`}}/>
-                  <div style={{fontSize: '12px', opacity: '0.7'}}>{moment(point['data']['x']).format('MMMM D')}</div>
-                  <div style={{fontWeight: '700', lineHeight: '24px'}}>{point['data']['y'].toFixed(2)}{currentLineChart === 'otkl' && '%'}</div>
+                  <div style={{fontSize: '12px', opacity: '0.7'}}>{moment(point['data']['x'], 'DD.MM.YYYY').format('D MMMM')}</div>
+                  <div style={{fontWeight: '700', lineHeight: '24px'}}>
+                    {point['data']['y'].toFixed(currentLineChart === 'otkl' ? 2 : 0)}{currentLineChart === 'otkl' && '%'}</div>
                 </div>
               )}
             />
