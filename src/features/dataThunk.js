@@ -17,36 +17,41 @@ export const fetchAbonsData = createAsyncThunk("user/fetchAbonsData", async (dat
 
 export const fetchAbonsDataArray = createAsyncThunk("user/fetchAbonsDataArray", async (data) => {
   try {
-    let abonsDataArray = [
-      {
-        "id": "ААБ",
-        "color": '#1DBF12',
-        "data": [],
-      },
-      {
-        "id": "НАБ",
-        "color": '#E31A1A',
-        "data": [],
-      },
-      {
-        "id": "Отклонение",
-        "color": '#4318FF',
-        "data": []
-      }
-    ];
+    let abonsDataArray = [{
+      "id": "ААБ", "color": '#1DBF12', "data": [],
+    }, {
+      "id": "НАБ", "color": '#E31A1A', "data": [],
+    }, {
+      "id": "Отклонение", "color": '#4318FF', "data": []
+    }];
     
-    for (const date of data.dates) {
-      const formData = new FormData();
-      formData.append('date_filter', date.split('.').reverse().join('-'));
-      formData.append('squares_id', data.square);
-      const response = await axiosApi.post("/filtered_squares/", formData);
-      abonsDataArray[0].data.push({"x": date, "y": response?.data?.count?.['Актив'] || 0});
-      abonsDataArray[1].data.push({"x": date, "y": response?.data?.count?.['Неактив'] || 0});
-      abonsDataArray[2].data.push({
-        "x": date, "y": Number(((response?.data?.count?.['Актив'] || 0) / ((response?.data?.count?.['Актив'] || 0) +
-          (response?.data?.count?.['Неактив'] || 0) || 0) * 100)) - 90 || 0
-      });
-    }
+    const req = await axiosApi.post("/filer_data_active_neactive/", {
+      date_filter: data.dates, squares_id: data.square,
+    });
+    const res = await req.data;
+    
+    abonsDataArray[0].data = res?.aab.map(day => ({
+      x: day?.date,
+      y: day?.amount || 0,
+    }));
+    abonsDataArray[1].data = res?.nab.map(day => ({
+      x: day?.date,
+      y: day?.amount || 0,
+    }));
+    abonsDataArray[2].data = res?.aab.map((day, i) => {
+      return {
+        x: day?.date,
+        y: Number(((res?.aab[i]?.amount || 0) / ((res?.aab[i]?.amount || 0) +
+          (res?.nab[i]?.amount || 0) || 0) * 100)) - 90 || 0,
+      }
+    });
+    
+    // abonsDataArray[2].data.push({
+    //   "x": date, "y": Number(((response?.data?.count?.['Актив'] || 0) / ((response?.data?.count?.['Актив'] || 0) +
+    //     (response?.data?.count?.['Неактив'] || 0) || 0) * 100)) - 90 || 0
+    // });
+    
+    console.log(abonsDataArray);
     
     return abonsDataArray;
   } catch (e) {
@@ -59,6 +64,16 @@ export const fetchSquares = createAsyncThunk("user/fetchSquares", async () => {
     const req = await axiosApi('squares/');
     const res = await req.data;
     return res.data;
+  } catch (e) {
+    console.log(e);
+  }
+});
+
+export const fetchRating = createAsyncThunk("user/fetchRating", async () => {
+  try {
+    const req = await axiosApi('raiting_si/');
+    const res = await req.data;
+    console.log(res);
   } catch (e) {
     console.log(e);
   }

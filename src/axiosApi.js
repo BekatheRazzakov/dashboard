@@ -9,7 +9,7 @@ export const addInterceptors = (store) => {
     if (!isSignUp && !isSignIn) {
       const token = store.getState().userState.user;
       const headers = config.headers;
-      headers.set('Authorization', `Token ${token}`);
+      // headers.set('Authorization', `Token ${token}`);
     }
     return config;
   });

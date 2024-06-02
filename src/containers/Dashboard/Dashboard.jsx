@@ -1,12 +1,12 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import DatePicker from "../../components/DatePicker/DatePicker";
-import {useAppDispatch, useAppSelector} from "../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import moment from "moment";
-import {setDateFieldName} from "../../features/dataSlice";
+import { setDateFieldName } from "../../features/dataSlice";
 import { fetchAbonsData, fetchAbonsDataArray } from "../../features/dataThunk";
-import {ResponsiveLine} from "@nivo/line";
-import {ResponsivePie} from '@nivo/pie'
-import {ResponsiveBar} from '@nivo/bar';
+import { ResponsiveLine } from "@nivo/line";
+import { ResponsivePie } from '@nivo/pie'
+import { ResponsiveBar } from '@nivo/bar';
 import calendarIcon from '../../assets/calendar.svg';
 import defaultAvatar from '../../assets/default-avatar.png';
 import CoverLoader from "../../components/CoverLoader/CoverLoader";
@@ -118,22 +118,22 @@ const Dashboard = ({style, title}) => {
   const nabPercentage = Number(((abonsData.nab || 0) / (abonsData.oab || 0) * 100).toFixed(2)) || 0;
   const otkloneniePercentage = Number((aabPercentage - 90).toFixed(2)) || 0;
   const otklonenieKolvo = Number((((abonsData.oab || 0) / 100 * 90) / 100 * otkloneniePercentage).toFixed()) || 0;
-  const minY = Math.min(...[abonsDataArray[
+  const minY = Math.min(...[(abonsDataArray || [])[
     currentLineChart === 'aab' ? 0 :
       currentLineChart === 'nab' ? 1 :
         currentLineChart === 'otkl' ? 2 : 0
-    ]].flatMap(series => series.data.map(d => parseInt(d.y))));
-  const maxY = Math.max(...[abonsDataArray[
+    ]].flatMap(series => series?.data.map(d => parseInt(d.y))));
+  const maxY = Math.max(...[(abonsDataArray || [])[
     currentLineChart === 'aab' ? 0 :
       currentLineChart === 'nab' ? 1 :
         currentLineChart === 'otkl' ? 2 : 0
-    ]].flatMap(series => series.data.map(d => parseInt(d.y))));
+    ]].flatMap(series => series?.data.map(d => parseInt(d.y))));
   const tickStep =
     currentLineChart === 'aab' ? 200 :
       currentLineChart === 'nab' ? 50 :
         currentLineChart === 'otkl' ? 4 : 0;
   const tickValues = Array.from({length: Math.ceil((maxY - minY) / tickStep) + 1}, (_, index) => minY + index * tickStep);
-
+  
   const changeHandler = (value) => {
     if (dateFieldName === 'periodDate1') {
       if (!state.periodDate1) {
@@ -169,11 +169,11 @@ const Dashboard = ({style, title}) => {
       }));
     }
   };
-
+  
   const formatNumber = (number) => {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
   };
-
+  
   useEffect(() => {
     const getData = async () => {
       setFetchAbonDataLoading(true);
@@ -190,10 +190,10 @@ const Dashboard = ({style, title}) => {
       let dates = [];
       
       while (startDate <= endDate) {
-        dates.push(startDate.format("DD.MM.YYYY"));
+        dates.push(startDate.format("YYYY-MM-DD"));
         startDate = startDate.add(1, 'days');
       }
-      dispatch(fetchAbonsDataArray({dates, square: currentSquare?.id || 19}))
+      dispatch(fetchAbonsDataArray({dates, square: currentSquare?.id}));
     }
   }, [currentSquare?.id, dispatch, state.periodDate1, state.periodDate2]);
   
@@ -236,8 +236,8 @@ const Dashboard = ({style, title}) => {
             <span className="abons-card-value">{otkloneniePercentage}%</span>
           </div>
         </div>
-
-
+        
+        
         <div className="paper date-picker-block">
           <DatePicker
             date1={
@@ -248,8 +248,8 @@ const Dashboard = ({style, title}) => {
             changeHandler={changeHandler}
           />
         </div>
-
-
+        
+        
         <div className="paper percentage">
           {fetchAbonDataLoading && <CoverLoader/>}
           <span className="percentage-title">Проценты</span>
@@ -288,8 +288,8 @@ const Dashboard = ({style, title}) => {
             </div>
           </div>
         </div>
-
-
+        
+        
         <div className="paper si-rating">
           <div style={{display: 'flex', justifyContent: 'space-between'}}>
             <h2 className="si-rating-block-title">Рейтинг СИ</h2>
@@ -322,22 +322,22 @@ const Dashboard = ({style, title}) => {
           <div className="si-rating-staff-list">
             {
               siRating.sort((a, b) => parseInt(b[siSortBy]) - parseInt(a[siSortBy]))
-                .map(si => (
-                  <div className="si-rating-staff-item">
-                    <div style={{display: 'flex', gap: '9px', alignItems: 'center', flexGrow: 1, maxWidth: '210px'}}>
-                      <img src={defaultAvatar} alt="Сервис инженер"/>
-                      <span className="si-rating-staff-item-name">{si.name}</span>
-                    </div>
-                    <span className="si-rating-staff-item-number">{si.podkl}</span>
-                    <span className="si-rating-staff-item-number">{si.tp}</span>
-                    <span className="si-rating-staff-item-number">{si.dem}</span>
+              .map(si => (
+                <div className="si-rating-staff-item">
+                  <div style={{display: 'flex', gap: '9px', alignItems: 'center', flexGrow: 1, maxWidth: '210px'}}>
+                    <img src={defaultAvatar} alt="Сервис инженер"/>
+                    <span className="si-rating-staff-item-name">{si.name}</span>
                   </div>
-                ))
+                  <span className="si-rating-staff-item-number">{si.podkl}</span>
+                  <span className="si-rating-staff-item-number">{si.tp}</span>
+                  <span className="si-rating-staff-item-number">{si.dem}</span>
+                </div>
+              ))
             }
           </div>
         </div>
-
-
+        
+        
         <div className="paper abons-in-graphs">
           <div className="abons-in-graphs-numbers">
             <div
@@ -364,7 +364,10 @@ const Dashboard = ({style, title}) => {
               style={{
                 fontWeight: '700', fontSize: '24px', color: 'var(--primary)', lineHeight: '36px',
               }}
-            >{abonsData.oab}</span>
+            >{
+              abonsDataArray[0].data[abonsDataArray[0].data.length - 1].y +
+              abonsDataArray[1].data[abonsDataArray[0].data.length - 1].y
+            }</span>
             <div className="abon-types">
               <span
                 className={currentLineChart === 'aab' ? "abon-type-aab" : ''}
@@ -380,8 +383,8 @@ const Dashboard = ({style, title}) => {
               >Отклонение %</span>
             </div>
           </div>
-
-
+          
+          
           <div className="abons-chart">
             {abonsDataArrayLoading && <CoverLoader/>}
             <ResponsiveLine
@@ -430,7 +433,10 @@ const Dashboard = ({style, title}) => {
                   }}
                 >
                   <span className="responsive-line-tooltip-pointer" style={{borderTop: `6px solid ${point['color']}`}}/>
-                  <div style={{fontSize: '12px', opacity: '0.7'}}>{moment(point['data']['x'], 'DD.MM.YYYY').format('D MMMM')}</div>
+                  <div style={{
+                    fontSize: '12px',
+                    opacity: '0.7'
+                  }}>{moment(point['data']['x'], 'DD.MM.YYYY').format('D MMMM')}</div>
                   <div style={{fontWeight: '700', lineHeight: '24px'}}>
                     {point['data']['y'].toFixed(currentLineChart === 'otkl' ? 2 : 0)}{currentLineChart === 'otkl' && '%'}</div>
                 </div>
@@ -438,8 +444,8 @@ const Dashboard = ({style, title}) => {
             />
           </div>
         </div>
-
-
+        
+        
         <div className="paper tariffs">
           <div style={{display: 'flex', justifyContent: 'space-between'}}>
             <h2 className="si-rating-block-title">Тарифы</h2>

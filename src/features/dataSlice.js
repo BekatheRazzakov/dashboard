@@ -1,5 +1,5 @@
 import {createSlice} from "@reduxjs/toolkit";
-import { fetchAbonsData, fetchAbonsDataArray, fetchSquares } from "./dataThunk";
+import { fetchAbonsData, fetchAbonsDataArray, fetchRating, fetchSquares } from "./dataThunk";
 
 const initialState = {
   fetchAbonsLoading: false,
@@ -33,6 +33,8 @@ const initialState = {
     }
   ],
   abonsDataArrayLoading: false,
+  rating: [],
+  fetchRatingLoading: false,
 };
 
 const DataSlice = createSlice({
@@ -99,6 +101,16 @@ const DataSlice = createSlice({
     });
     builder.addCase(fetchSquares.rejected, (state) => {
       state.fetchAbonsLoading = false;
+    });
+    
+    builder.addCase(fetchRating.pending, (state) => {
+      state.fetchRatingLoading = true;
+    });
+    builder.addCase(fetchRating.fulfilled, (state, action) => {
+      state.fetchRatingLoading = false;
+    });
+    builder.addCase(fetchRating.rejected, (state) => {
+      state.fetchRatingLoading = false;
     });
   },
 });
