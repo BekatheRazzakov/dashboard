@@ -177,7 +177,10 @@ const Dashboard = ({style, title}) => {
   useEffect(() => {
     const getData = async () => {
       setFetchAbonDataLoading(true);
-      await dispatch(fetchAbonsData({date: state.abonsNumDate, square: currentSquare?.id || 19}));
+      const reformatDate = moment(state.abonsNumDate, 'DD.MM.YYYY').format('YYYY-MM-DD');
+      await dispatch(fetchAbonsData(
+        {date: reformatDate, square: currentSquare?.id}
+      ));
       setFetchAbonDataLoading(false);
     };
     void getData();
@@ -364,10 +367,13 @@ const Dashboard = ({style, title}) => {
               style={{
                 fontWeight: '700', fontSize: '24px', color: 'var(--primary)', lineHeight: '36px',
               }}
-            >{
-              abonsDataArray[0].data[abonsDataArray[0].data.length - 1].y +
-              abonsDataArray[1].data[abonsDataArray[0].data.length - 1].y
-            }</span>
+            >
+              {
+                abonsDataArray.length ?
+                  abonsDataArray[0].data[abonsDataArray[0].data.length - 1]?.y +
+                  abonsDataArray[1].data[abonsDataArray[0].data.length - 1]?.y : 0
+              }
+            </span>
             <div className="abon-types">
               <span
                 className={currentLineChart === 'aab' ? "abon-type-aab" : ''}
@@ -406,7 +412,7 @@ const Dashboard = ({style, title}) => {
               crosshairType="bottom-right"
               axisTop={null}
               axisRight={{
-                tickSize: 10,
+                tickSize: 5,
                 tickPadding: 8,
                 tickRotation: 0,
               }}

@@ -65,11 +65,7 @@ const DataSlice = createSlice({
     });
     builder.addCase(fetchAbonsData.fulfilled, (state, action) => {
       state.fetchAbonsLoading = false;
-      state.abonsData = {
-        oab: action.payload?.all_count || 0,
-        aab: action.payload?.count['Актив'] || 0,
-        nab: action.payload?.count['Неактив'] || 0,
-      };
+      state.abonsData = action.payload;
     });
     builder.addCase(fetchAbonsData.rejected, (state) => {
       state.abonsDataArrayLoading = false;

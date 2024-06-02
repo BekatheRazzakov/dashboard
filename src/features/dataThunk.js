@@ -3,13 +3,10 @@ import axiosApi from "../axiosApi";
 
 export const fetchAbonsData = createAsyncThunk("user/fetchAbonsData", async (data) => {
   try {
-    const formData = new FormData();
-    
-    formData.append('date_filter', data.date.split('.').reverse().join('-'));
-    formData.append('squares_id', data.square);
-    
-    const response = await axiosApi.post("/filtered_squares/", formData);
-    return response.data;
+    const response = await axiosApi(
+      `/test_data_active/?day=${data?.date}${data.square ? `&square=${data?.square}` : ''}
+      `);
+    return response.data.count;
   } catch (e) {
     console.log(e);
   }
@@ -45,13 +42,6 @@ export const fetchAbonsDataArray = createAsyncThunk("user/fetchAbonsDataArray", 
           (res?.nab[i]?.amount || 0) || 0) * 100)) - 90 || 0,
       }
     });
-    
-    // abonsDataArray[2].data.push({
-    //   "x": date, "y": Number(((response?.data?.count?.['Актив'] || 0) / ((response?.data?.count?.['Актив'] || 0) +
-    //     (response?.data?.count?.['Неактив'] || 0) || 0) * 100)) - 90 || 0
-    // });
-    
-    console.log(abonsDataArray);
     
     return abonsDataArray;
   } catch (e) {
