@@ -70,3 +70,15 @@ export const fetchRating = createAsyncThunk("user/fetchRating", async (data) => 
     console.log(e);
   }
 });
+
+export const fetchTariffs = createAsyncThunk("user/fetchTariffs", async (data) => {
+  try {
+    const req = await axiosApi(
+      `/tariffs_daily?day=${data?.date}${data.square ? `&square=${data?.square}` : ''}`
+    );
+    const res = await req.data;
+    return res.tariffs.filter(tariff => tariff.aab > 5 && tariff.nab > 5);
+  } catch (e) {
+    console.log(e);
+  }
+});

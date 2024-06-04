@@ -1,5 +1,5 @@
 import {createSlice} from "@reduxjs/toolkit";
-import { fetchAbonsData, fetchAbonsDataArray, fetchRating, fetchSquares } from "./dataThunk";
+import { fetchAbonsData, fetchAbonsDataArray, fetchRating, fetchSquares, fetchTariffs } from "./dataThunk";
 
 const initialState = {
   fetchAbonsLoading: false,
@@ -35,6 +35,8 @@ const initialState = {
   abonsDataArrayLoading: false,
   rating: [],
   fetchRatingLoading: false,
+  tariffs: [],
+  tariffsLoading: false,
 };
 
 const DataSlice = createSlice({
@@ -88,7 +90,7 @@ const DataSlice = createSlice({
     builder.addCase(fetchSquares.fulfilled, (state, action) => {
       state.fetchAbonsLoading = false;
       let data = {};
-      for (const square of action.payload) {
+      for (const square of action?.payload) {
         if (square.regions?.length) {
           data[square.regions[0]] = [...data[square.regions[0]] || [], square];
         }
@@ -108,6 +110,17 @@ const DataSlice = createSlice({
     });
     builder.addCase(fetchRating.rejected, (state) => {
       state.fetchRatingLoading = false;
+    });
+    
+    builder.addCase(fetchTariffs.pending, (state) => {
+      state.tariffsLoading = true;
+    });
+    builder.addCase(fetchTariffs.fulfilled, (state, action) => {
+      state.tariffsLoading = false;
+      state.tariffs = action.payload;
+    });
+    builder.addCase(fetchTariffs.rejected, (state) => {
+      state.tariffsLoading = false;
     });
   },
 });
