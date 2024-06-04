@@ -4,8 +4,8 @@ import axiosApi from "../axiosApi";
 export const fetchAbonsData = createAsyncThunk("user/fetchAbonsData", async (data) => {
   try {
     const response = await axiosApi(
-      `/test_data_active/?day=${data?.date}${data.square ? `&square=${data?.square}` : ''}
-      `);
+      `/test_data_active/?day=${data?.date}${data.square ? `&square=${data?.square}` : ''}`
+    );
     return response.data.count;
   } catch (e) {
     console.log(e);
@@ -59,11 +59,13 @@ export const fetchSquares = createAsyncThunk("user/fetchSquares", async () => {
   }
 });
 
-export const fetchRating = createAsyncThunk("user/fetchRating", async () => {
+export const fetchRating = createAsyncThunk("user/fetchRating", async (data) => {
   try {
-    const req = await axiosApi('raiting_si/');
+    const req = await axiosApi(
+      `/raiting_si/?month=${data?.date}${data.square ? `&squares=${data?.square}` : ''}`
+    );
     const res = await req.data;
-    console.log(res);
+    return res.raitingSi;
   } catch (e) {
     console.log(e);
   }

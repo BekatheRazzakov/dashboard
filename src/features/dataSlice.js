@@ -104,6 +104,7 @@ const DataSlice = createSlice({
     });
     builder.addCase(fetchRating.fulfilled, (state, action) => {
       state.fetchRatingLoading = false;
+      state.rating = action.payload;
     });
     builder.addCase(fetchRating.rejected, (state) => {
       state.fetchRatingLoading = false;

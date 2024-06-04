@@ -55,10 +55,10 @@ const Menu = () => {
           </span>
       </div>
       <div style={{position: 'relative', opacity: location.pathname === '/regions' ? 0.5 : 1}}>
-        {/*{location.pathname === '/regions' && <div className="menu-item-disabler"></div>}*/}
         <div
           className={`menu-item ${currentMenu === 'loc' ? 'menu-item-selected' : ''}`}
           onClick={() => {
+            if (location.pathname === '/regions') return;
             if (currentMenu === 'loc') {
               dispatch(setTab('stat'));
             } else dispatch(setTab('loc'));

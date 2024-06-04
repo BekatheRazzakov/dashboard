@@ -3,7 +3,7 @@ import DatePicker from "../../components/DatePicker/DatePicker";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import moment from "moment";
 import { setDateFieldName } from "../../features/dataSlice";
-import { fetchAbonsData, fetchAbonsDataArray } from "../../features/dataThunk";
+import { fetchAbonsData, fetchAbonsDataArray, fetchRating } from "../../features/dataThunk";
 import { ResponsiveLine } from "@nivo/line";
 import { ResponsivePie } from '@nivo/pie'
 import { ResponsiveBar } from '@nivo/bar';
@@ -11,45 +11,6 @@ import calendarIcon from '../../assets/calendar.svg';
 import defaultAvatar from '../../assets/default-avatar.png';
 import CoverLoader from "../../components/CoverLoader/CoverLoader";
 import './dashboard.css';
-
-const siRating = [
-  {
-    name: 'Маликов Кубан',
-    podkl: '200',
-    tp: '210',
-    dem: '34',
-  },
-  {
-    name: 'Айылчы Дуйшобаев',
-    podkl: '210',
-    tp: '12',
-    dem: '17',
-  },
-  {
-    name: 'Ренат Ренатов',
-    podkl: '199',
-    tp: '24',
-    dem: '34',
-  },
-  {
-    name: 'Абдырасул Абдырасулов',
-    podkl: '100',
-    tp: '75',
-    dem: '91',
-  },
-  {
-    name: 'Мурат Муратов',
-    podkl: '188',
-    tp: '56',
-    dem: '39',
-  },
-  {
-    name: 'Сталбек Солто уулу',
-    podkl: '163',
-    tp: '42',
-    dem: '185',
-  },
-];
 
 const tariffData = [
   {
@@ -106,6 +67,8 @@ const Dashboard = ({style, title}) => {
   const currentSquare = useAppSelector(state => state.dataState.currentSquare);
   const abonsDataArray = useAppSelector(state => state.dataState.abonsDataArray);
   const abonsDataArrayLoading = useAppSelector(state => state.dataState.abonsDataArrayLoading);
+  const siRating = useAppSelector(state => state.dataState.rating);
+  const fetchRatingLoading = useAppSelector(state => state.dataState.fetchRatingLoading);
   const [state, setState] = useState({
     periodDate1: moment().subtract(7, 'days').format('DD.MM.YYYY'),
     periodDate2: moment().subtract(1, 'days').format('DD.MM.YYYY'),
@@ -178,6 +141,9 @@ const Dashboard = ({style, title}) => {
     const getData = async () => {
       setFetchAbonDataLoading(true);
       const reformatDate = moment(state.abonsNumDate, 'DD.MM.YYYY').format('YYYY-MM-DD');
+      await dispatch(fetchRating(
+        {date: reformatDate, square: currentSquare?.id}
+      ));
       await dispatch(fetchAbonsData(
         {date: reformatDate, square: currentSquare?.id}
       ));
@@ -294,6 +260,7 @@ const Dashboard = ({style, title}) => {
         
         
         <div className="paper si-rating">
+          {fetchRatingLoading && <CoverLoader/>}
           <div style={{display: 'flex', justifyContent: 'space-between'}}>
             <h2 className="si-rating-block-title">Рейтинг СИ</h2>
             <div
@@ -324,7 +291,7 @@ const Dashboard = ({style, title}) => {
           </div>
           <div className="si-rating-staff-list">
             {
-              siRating.sort((a, b) => parseInt(b[siSortBy]) - parseInt(a[siSortBy]))
+              !!siRating.length && siRating.slice(0, siRating.length).sort((a, b) => parseInt(b[siSortBy]) - parseInt(a[siSortBy]))
               .map(si => (
                 <div className="si-rating-staff-item">
                   <div style={{display: 'flex', gap: '9px', alignItems: 'center', flexGrow: 1, maxWidth: '210px'}}>
@@ -369,7 +336,7 @@ const Dashboard = ({style, title}) => {
               }}
             >
               {
-                abonsDataArray.length ?
+                abonsDataArray[0].data.length ?
                   abonsDataArray[0].data[abonsDataArray[0].data.length - 1]?.y +
                   abonsDataArray[1].data[abonsDataArray[0].data.length - 1]?.y : 0
               }
