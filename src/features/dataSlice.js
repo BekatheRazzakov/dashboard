@@ -144,9 +144,9 @@ const DataSlice = createSlice({
       state.dataByRegions = action.payload;
       if (state.currentRegion.length) {
         state.abonsData = {
-          aab: state.dataByRegions?.[state.currentRegion].aab || 0,
-          nab: state.dataByRegions?.[state.currentRegion].nab || 0,
-          oab: (state.dataByRegions?.[state.currentRegion].aab + state.dataByRegions?.['Нарын'].nab) || 0,
+          aab: state.dataByRegions?.[state.currentRegion]?.aab || 0,
+          nab: state.dataByRegions?.[state.currentRegion]?.nab || 0,
+          oab: (state.dataByRegions?.[state.currentRegion]?.aab + state.dataByRegions?.['Нарын']?.nab) || 0,
         };
       }
     });

@@ -60,8 +60,6 @@ const Regions = () => {
     });
   };
   
-  console.log(1);
-  
   return (
     <>
       <div className="regions" ref={regionsRef}>
@@ -141,9 +139,9 @@ const Regions = () => {
                    onRegionClick('Джалал-Абад');
                    dispatch(setRegion('Джалал-Абад'));
                    dispatch(setAbonsData({
-                     aab: dataByRegions?.['Джалал-Абад'].aab || 0,
-                     nab: dataByRegions?.['Джалал-Абад'].nab || 0,
-                     oab: (dataByRegions?.['Джалал-Абад'].aab + dataByRegions?.['Джалал-Абад'].nab) || 0,
+                     aab: dataByRegions?.['Джалал-Абад']?.aab || 0,
+                     nab: dataByRegions?.['Джалал-Абад']?.nab || 0,
+                     oab: (dataByRegions?.['Джалал-Абад']?.aab + dataByRegions?.['Джалал-Абад']?.nab) || 0,
                    }));
                  }}
                  onMouseEnter={() => {
@@ -163,9 +161,9 @@ const Regions = () => {
                    onRegionClick('Нарын');
                    dispatch(setRegion('Нарын'));
                    dispatch(setAbonsData({
-                     aab: dataByRegions?.['Нарын'].aab || 0,
-                     nab: dataByRegions?.['Нарын'].nab || 0,
-                     oab: (dataByRegions?.['Нарын'].aab + dataByRegions?.['Нарын'].nab) || 0,
+                     aab: dataByRegions?.['Нарын']?.aab || 0,
+                     nab: dataByRegions?.['Нарын']?.nab || 0,
+                     oab: (dataByRegions?.['Нарын']?.aab + dataByRegions?.['Нарын']?.nab) || 0,
                    }));
                  }}
                  onMouseEnter={() => {
@@ -185,9 +183,9 @@ const Regions = () => {
                    onRegionClick('Ош');
                    dispatch(setRegion('Ош'));
                    dispatch(setAbonsData({
-                     aab: dataByRegions?.['Ош'].aab || 0,
-                     nab: dataByRegions?.['Ош'].nab || 0,
-                     oab: (dataByRegions?.['Ош'].aab + dataByRegions?.['Ош'].nab) || 0,
+                     aab: dataByRegions?.['Ош']?.aab || 0,
+                     nab: dataByRegions?.['Ош']?.nab || 0,
+                     oab: (dataByRegions?.['Ош']?.aab + dataByRegions?.['Ош']?.nab) || 0,
                    }));
                  }}
                  onMouseEnter={() => {
@@ -207,9 +205,9 @@ const Regions = () => {
                    onRegionClick('Талас');
                    dispatch(setRegion('Талас'));
                    dispatch(setAbonsData({
-                     aab: dataByRegions?.['Талас'].aab || 0,
-                     nab: dataByRegions?.['Талас'].nab || 0,
-                     oab: (dataByRegions?.['Талас'].aab + dataByRegions?.['Талас'].nab) || 0,
+                     aab: dataByRegions?.['Талас']?.aab || 0,
+                     nab: dataByRegions?.['Талас']?.nab || 0,
+                     oab: (dataByRegions?.['Талас']?.aab + dataByRegions?.['Талас']?.nab) || 0,
                    }));
                  }}
                  onMouseEnter={() => {
@@ -229,9 +227,9 @@ const Regions = () => {
                    onRegionClick('Иссык-Куль');
                    dispatch(setRegion('Иссык-Куль'));
                    dispatch(setAbonsData({
-                     aab: dataByRegions?.['Иссык-Куль'].aab || 0,
-                     nab: dataByRegions?.['Иссык-Куль'].nab || 0,
-                     oab: (dataByRegions?.['Иссык-Куль'].aab + dataByRegions?.['Иссык-Куль'].nab) || 0,
+                     aab: dataByRegions?.['Иссык-Куль']?.aab || 0,
+                     nab: dataByRegions?.['Иссык-Куль']?.nab || 0,
+                     oab: (dataByRegions?.['Иссык-Куль']?.aab + dataByRegions?.['Иссык-Куль']?.nab) || 0,
                    }));
                  }}
                  onMouseEnter={() => {
@@ -251,9 +249,9 @@ const Regions = () => {
                    onRegionClick('Чуй');
                    dispatch(setRegion('Чуй'));
                    dispatch(setAbonsData({
-                     aab: dataByRegions?.['Чуй'].aab || 0,
-                     nab: dataByRegions?.['Чуй'].nab || 0,
-                     oab: (dataByRegions?.['Чуй'].aab + dataByRegions?.['Чуй'].nab) || 0,
+                     aab: dataByRegions?.['Чуй']?.aab || 0,
+                     nab: dataByRegions?.['Чуй']?.nab || 0,
+                     oab: (dataByRegions?.['Чуй']?.aab + dataByRegions?.['Чуй']?.nab) || 0,
                    }));
                  }}
                  onMouseEnter={() => {
