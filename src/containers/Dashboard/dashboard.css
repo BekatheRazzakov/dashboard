@@ -397,8 +397,9 @@
   width: 50%;
   height: 385px;
   padding: 30px;
-  overflow: unset;
+  overflow: hidden;
 }
+
 .percentage {
   position: relative;
 }
