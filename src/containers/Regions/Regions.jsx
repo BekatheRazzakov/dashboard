@@ -24,6 +24,10 @@ const Regions = () => {
   
   useEffect(() => {
     const getData = async () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
       const endDate = moment(startDate, 'YYYY-MM-DD').add(1, 'days').format('YYYY-MM-DD');
       dispatch(fetchDataByRegions({startDate, endDate}));
     };
@@ -275,7 +279,7 @@ const Regions = () => {
             boxShadow: '0 -8px 34px 0 #0000001A', border: '1px solid #E1E4E6'
           }}
           title={currentRegion}
-          regions={true}
+          regions
           onDateChange={onDateChange}
         />
       </div>

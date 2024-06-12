@@ -84,18 +84,18 @@ const Dashboard = ({style, title, regions, onDateChange}) => {
   useEffect(() => {
     const getData = async () => {
       const reformatDate = moment(state.abonsNumDate, 'DD.MM.YYYY').format('YYYY-MM-DD');
-      if (regions) {
-        onDateChange(reformatDate);
-      }
       dispatch(fetchAbonsData({date: reformatDate, square: currentSquare?.id}));
       dispatch(fetchTariffs({date: reformatDate, square: currentSquare?.id}));
       dispatch(fetchRating({date: reformatDate, square: currentSquare?.id}));
     };
-    void getData();
+    if (!regions) {
+      void getData();
+    }
     // no more dependencies needed
-  }, [currentSquare?.id, dispatch, regions, state.abonsNumDate]);
+  }, [currentSquare?.id, state.abonsNumDate]);
   
   useEffect(() => {
+    if (regions) return;
     if (state.periodDate1 && state.periodDate2) {
       let startDate = moment(state.periodDate1, "DD.MM.YYYY");
       let endDate = moment(state.periodDate2, "DD.MM.YYYY");
@@ -107,7 +107,16 @@ const Dashboard = ({style, title, regions, onDateChange}) => {
       }
       dispatch(fetchAbonsDataArray({dates, square: currentSquare?.id}));
     }
-  }, [currentSquare?.id, dispatch, state.periodDate1, state.periodDate2]);
+    // no more dependencies needed
+  }, [currentSquare?.id, state.periodDate1, state.periodDate2]);
+  
+  useEffect(() => {
+    const reformatDate = moment(state.abonsNumDate, 'DD.MM.YYYY').format('YYYY-MM-DD');
+    if (regions) {
+      onDateChange(reformatDate);
+    }
+    // no more dependencies needed
+  }, [regions, state.abonsNumDate]);
   
   const TariffsPopup = memo(() => {
     return (
@@ -239,6 +248,7 @@ const Dashboard = ({style, title, regions, onDateChange}) => {
         
         
         <div className="paper si-rating">
+          {regions && <div className="cover-disabler"/>}
           {fetchRatingLoading && <CoverLoader/>}
           <div style={{display: 'flex', justifyContent: 'space-between'}}>
             <h2 className="si-rating-block-title">Рейтинг СИ</h2>
@@ -284,6 +294,7 @@ const Dashboard = ({style, title, regions, onDateChange}) => {
         
         
         <div className="paper abons-in-graphs">
+          {regions && <div className="cover-disabler"/>}
           <div className="abons-in-graphs-numbers">
             <div
               className={`abons-in-numbers-date ${dateFieldName === 'periodDate1' ? 'abons-in-numbers-date-selected' : ''}`}
@@ -373,6 +384,7 @@ const Dashboard = ({style, title, regions, onDateChange}) => {
         
         
         <div className="paper tariffs" onMouseMove={() => setShowCurrentTariff(false)}>
+          {regions && <div className="cover-disabler"/>}
           {tariffsLoading && <CoverLoader/>}
           {
             showCurrentTariff &&
