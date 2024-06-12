@@ -106,7 +106,7 @@ const Dashboard = ({style, title}) => {
     }
   }, [currentSquare?.id, dispatch, state.periodDate1, state.periodDate2]);
   
-  const TariffsPopup = memo(({tariffName}) => {
+  const TariffsPopup = memo(() => {
     return (
       <div className="tariffs-tooltip"
            style={{transform: `translate(-50%, -110%)`, position: 'fixed', top: currentTariff.y + 'px', left: currentTariff.x + 'px', zIndex: '1'}}
