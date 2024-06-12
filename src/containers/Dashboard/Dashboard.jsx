@@ -92,6 +92,7 @@ const Dashboard = ({style, title, regions, onDateChange}) => {
       dispatch(fetchRating({date: reformatDate, square: currentSquare?.id}));
     };
     void getData();
+    // no more dependencies needed
   }, [currentSquare?.id, dispatch, regions, state.abonsNumDate]);
   
   useEffect(() => {
