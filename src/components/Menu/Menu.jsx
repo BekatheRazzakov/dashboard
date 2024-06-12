@@ -17,6 +17,10 @@ const Menu = () => {
   const location = useLocation();
   const currentMenu = useAppSelector(state => state.dataState.currentTab);
   const squares = useAppSelector(state => state.dataState.squares);
+  const fetchAbonsLoading = useAppSelector(state => state.dataState.fetchAbonsLoading);
+  const abonsDataArrayLoading = useAppSelector(state => state.dataState.abonsDataArrayLoading);
+  const fetchRatingLoading = useAppSelector(state => state.dataState.fetchRatingLoading);
+  const tariffsLoading = useAppSelector(state => state.dataState.tariffsLoading);
   const [selectedRegion, setSelectedRegion] = useState('');
   const [selectedSquare, setSelectedSquare] = useState(-1);
   
@@ -75,7 +79,7 @@ const Menu = () => {
         {
           currentMenu === 'loc' && <div className="menu-item-squares">
             {
-              Object.keys(squares).map((key) => (
+              Object.keys(squares || {}).map((key) => (
                 <div key={key}>
                   <div
                     className={`menu-item ${selectedRegion === key ? 'menu-item-selected' : ''}`}
@@ -92,10 +96,11 @@ const Menu = () => {
                   </div>
                   <div className="region-squares">
                     {
-                      selectedRegion === key && squares[key].map((square) => (
+                      selectedRegion === key && squares[key]?.map((square) => (
                         <div
                           className={`menu-item ${selectedSquare === square.id ? 'menu-item-selected' : ''}`}
                           onClick={() => {
+                            if (fetchAbonsLoading || abonsDataArrayLoading || fetchRatingLoading || tariffsLoading) return;
                             if (selectedSquare === square.id) {
                               setSelectedSquare('');
                               return dispatch(setCurrentSquare(''));

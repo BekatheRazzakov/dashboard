@@ -12,17 +12,18 @@ import defaultAvatar from '../../assets/default-avatar.png';
 import CoverLoader from "../../components/CoverLoader/CoverLoader";
 import './dashboard.css';
 
-const Dashboard = ({style, title}) => {
+const Dashboard = ({style, title, regions, onDateChange}) => {
   const dispatch = useAppDispatch();
   const dateFieldName = useAppSelector(state => state.dataState.dateFieldName);
   const abonsData = useAppSelector(state => state.dataState.abonsData);
   const currentSquare = useAppSelector(state => state.dataState.currentSquare);
   const abonsDataArray = useAppSelector(state => state.dataState.abonsDataArray);
+  const fetchAbonsLoading = useAppSelector(state => state.dataState.fetchAbonsLoading);
   const abonsDataArrayLoading = useAppSelector(state => state.dataState.abonsDataArrayLoading);
-  const siRating = useAppSelector(state => state.dataState.rating);
-  const tariffData = useAppSelector(state => state.dataState.tariffs);
   const fetchRatingLoading = useAppSelector(state => state.dataState.fetchRatingLoading);
   const tariffsLoading = useAppSelector(state => state.dataState.tariffsLoading);
+  const siRating = useAppSelector(state => state.dataState.rating);
+  const tariffData = useAppSelector(state => state.dataState.tariffs);
   const [state, setState] = useState({
     periodDate1: moment().subtract(7, 'days').format('DD.MM.YYYY'),
     periodDate2: moment().subtract(1, 'days').format('DD.MM.YYYY'),
@@ -38,7 +39,6 @@ const Dashboard = ({style, title}) => {
   const [showCurrentTariff, setShowCurrentTariff] = useState(false);
   const [siSortBy, setSiSortBy] = useState('podkl');
   const [currentLineChart, setCurrentLineChart] = useState('aab');
-  const [fetchAbonDataLoading, setFetchAbonDataLoading] = useState(false);
   const aabPercentage = Number(((abonsData.aab || 0) / (abonsData.oab || 0) * 100).toFixed(2)) || 0;
   const nabPercentage = Number(((abonsData.nab || 0) / (abonsData.oab || 0) * 100).toFixed(2)) || 0;
   const otkloneniePercentage = Number((aabPercentage - 90).toFixed(2)) || 0;
@@ -49,6 +49,7 @@ const Dashboard = ({style, title}) => {
   const tickValues = Array.from({length: Math.ceil((maxY - minY) / tickStep) + 1}, (_, index) => minY + index * tickStep);
   
   const changeHandler = (value) => {
+    if (fetchAbonsLoading || abonsDataArrayLoading || fetchRatingLoading || tariffsLoading) return;
     if (dateFieldName === 'periodDate1') {
       if (!state.periodDate1) {
         setState(prevState => ({
@@ -82,15 +83,16 @@ const Dashboard = ({style, title}) => {
   
   useEffect(() => {
     const getData = async () => {
-      setFetchAbonDataLoading(true);
       const reformatDate = moment(state.abonsNumDate, 'DD.MM.YYYY').format('YYYY-MM-DD');
+      if (regions) {
+        onDateChange(reformatDate);
+      }
+      dispatch(fetchAbonsData({date: reformatDate, square: currentSquare?.id}));
       dispatch(fetchTariffs({date: reformatDate, square: currentSquare?.id}));
       dispatch(fetchRating({date: reformatDate, square: currentSquare?.id}));
-      await dispatch(fetchAbonsData({date: reformatDate, square: currentSquare?.id}));
-      setFetchAbonDataLoading(false);
     };
     void getData();
-  }, [currentSquare, dispatch, state.abonsNumDate]);
+  }, [currentSquare?.id, dispatch, regions, state.abonsNumDate]);
   
   useEffect(() => {
     if (state.periodDate1 && state.periodDate2) {
@@ -109,7 +111,13 @@ const Dashboard = ({style, title}) => {
   const TariffsPopup = memo(() => {
     return (
       <div className="tariffs-tooltip"
-           style={{transform: `translate(-50%, -110%)`, position: 'fixed', top: currentTariff.y + 'px', left: currentTariff.x + 'px', zIndex: '1'}}
+           style={{
+             transform: `translate(-50%, -110%)`,
+             position: 'fixed',
+             top: currentTariff.y + 'px',
+             left: currentTariff.x + 'px',
+             zIndex: '1'
+           }}
       >
         <div className="tariffs-tooltip-pointer"/>
         <div className="tariffs-tooltip-pie-block">
@@ -156,7 +164,7 @@ const Dashboard = ({style, title}) => {
         <div
           className="paper abons-in-numbers"
         >
-          {fetchAbonDataLoading && <CoverLoader/>}
+          {fetchAbonsLoading && <CoverLoader/>}
           <div
             className={`abons-in-numbers-date ${dateFieldName === 'abonsNumDate' ? 'abons-in-numbers-date-selected' : ''}`}
             onClick={(e) => {
@@ -197,7 +205,7 @@ const Dashboard = ({style, title}) => {
         
         
         <div className="paper percentage">
-          {fetchAbonDataLoading && <CoverLoader/>}
+          {fetchAbonsLoading && <CoverLoader/>}
           <span className="percentage-title">Проценты</span>
           <ResponsivePie
             data={[{

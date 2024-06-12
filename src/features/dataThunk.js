@@ -3,10 +3,11 @@ import axiosApi from "../axiosApi";
 
 export const fetchAbonsData = createAsyncThunk("user/fetchAbonsData", async (data) => {
   try {
-    const response = await axiosApi(
+    const req = await axiosApi(
       `/test_data_active/?day=${data?.date}${data.square ? `&square=${data?.square}` : ''}`
     );
-    return response.data.count;
+    const res = await req.data;
+    return res.count;
   } catch (e) {
     console.log(e);
   }
@@ -78,6 +79,18 @@ export const fetchTariffs = createAsyncThunk("user/fetchTariffs", async (data) =
     );
     const res = await req.data;
     return res.tariffs.filter(tariff => tariff.aab > 5 && tariff.nab > 5);
+  } catch (e) {
+    console.log(e);
+  }
+});
+
+export const fetchDataByRegions = createAsyncThunk("user/fetchDataByRegions", async ({startDate, endDate}) => {
+  try {
+    const req = await axiosApi(
+      `/fulldata_active_neactive/?start_date=${startDate}&end_date=${endDate}`
+    );
+    const res = await req.data;
+    return res?.full_data;
   } catch (e) {
     console.log(e);
   }

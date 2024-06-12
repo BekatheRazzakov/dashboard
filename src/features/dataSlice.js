@@ -1,5 +1,12 @@
-import {createSlice} from "@reduxjs/toolkit";
-import { fetchAbonsData, fetchAbonsDataArray, fetchRating, fetchSquares, fetchTariffs } from "./dataThunk";
+import { createSlice } from "@reduxjs/toolkit";
+import {
+  fetchAbonsData,
+  fetchAbonsDataArray,
+  fetchDataByRegions,
+  fetchRating,
+  fetchSquares,
+  fetchTariffs
+} from "./dataThunk";
 
 const initialState = {
   fetchAbonsLoading: false,
@@ -13,6 +20,7 @@ const initialState = {
   currentRegion: '',
   dateFieldName: 'abonsNumDate',
   squares: null,
+  squaresLoading: false,
   currentSquare: null,
   fetchSquaresLoading: false,
   abonsDataArray: [
@@ -37,6 +45,8 @@ const initialState = {
   fetchRatingLoading: false,
   tariffs: [],
   tariffsLoading: false,
+  fetchDataByRegionsLoading: false,
+  dataByRegions: null,
 };
 
 const DataSlice = createSlice({
@@ -60,6 +70,9 @@ const DataSlice = createSlice({
       state.currentSquare = action.payload;
       state.currentRegion = '';
     },
+    setAbonsData: (state, action) => {
+      state.abonsData = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchAbonsData.pending, (state) => {
@@ -70,7 +83,7 @@ const DataSlice = createSlice({
       state.abonsData = action.payload;
     });
     builder.addCase(fetchAbonsData.rejected, (state) => {
-      state.abonsDataArrayLoading = false;
+      state.fetchAbonsLoading = false;
     });
     
     builder.addCase(fetchAbonsDataArray.pending, (state) => {
@@ -81,14 +94,14 @@ const DataSlice = createSlice({
       state.abonsDataArray = action.payload;
     });
     builder.addCase(fetchAbonsDataArray.rejected, (state) => {
-      state.fetchAbonsLoading = false;
+      state.abonsDataArrayLoading = false;
     });
     
     builder.addCase(fetchSquares.pending, (state) => {
-      state.fetchAbonsLoading = true;
+      state.squaresLoading = true;
     });
     builder.addCase(fetchSquares.fulfilled, (state, action) => {
-      state.fetchAbonsLoading = false;
+      state.squaresLoading = false;
       let data = {};
       for (const square of action?.payload) {
         if (square.regions?.length) {
@@ -98,7 +111,7 @@ const DataSlice = createSlice({
       state.squares = data;
     });
     builder.addCase(fetchSquares.rejected, (state) => {
-      state.fetchAbonsLoading = false;
+      state.squaresLoading = false;
     });
     
     builder.addCase(fetchRating.pending, (state) => {
@@ -122,8 +135,33 @@ const DataSlice = createSlice({
     builder.addCase(fetchTariffs.rejected, (state) => {
       state.tariffsLoading = false;
     });
+    
+    builder.addCase(fetchDataByRegions.pending, (state) => {
+      state.fetchDataByRegionsLoading = true;
+    });
+    builder.addCase(fetchDataByRegions.fulfilled, (state, action) => {
+      state.fetchDataByRegionsLoading = false;
+      state.dataByRegions = action.payload;
+      if (state.currentRegion.length) {
+        state.abonsData = {
+          aab: state.dataByRegions?.[state.currentRegion].aab || 0,
+          nab: state.dataByRegions?.[state.currentRegion].nab || 0,
+          oab: (state.dataByRegions?.[state.currentRegion].aab + state.dataByRegions?.['Нарын'].nab) || 0,
+        };
+      }
+    });
+    builder.addCase(fetchDataByRegions.rejected, (state) => {
+      state.fetchDataByRegionsLoading = false;
+    });
   },
 });
 
 export const dataReducer = DataSlice.reducer;
-export const {setDateFieldName, setDropdown, setTab, setRegion, setCurrentSquare} = DataSlice.actions;
+export const {
+  setDateFieldName,
+  setDropdown,
+  setTab,
+  setRegion,
+  setCurrentSquare,
+  setAbonsData
+} = DataSlice.actions;
