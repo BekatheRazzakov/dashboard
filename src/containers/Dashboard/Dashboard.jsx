@@ -39,10 +39,10 @@ const Dashboard = ({style, title, regions, onDateChange}) => {
   const [showCurrentTariff, setShowCurrentTariff] = useState(false);
   const [siSortBy, setSiSortBy] = useState('podkl');
   const [currentLineChart, setCurrentLineChart] = useState('aab');
-  const aabPercentage = Number(((abonsData.aab || 0) / (abonsData.oab || 0) * 100).toFixed(2)) || 0;
-  const nabPercentage = Number(((abonsData.nab || 0) / (abonsData.oab || 0) * 100).toFixed(2)) || 0;
+  const aabPercentage = Number(((abonsData?.aab || 0) / (abonsData?.oab || 0) * 100).toFixed(2)) || 0;
+  const nabPercentage = Number(((abonsData?.nab || 0) / (abonsData?.oab || 0) * 100).toFixed(2)) || 0;
   const otkloneniePercentage = Number((aabPercentage - 90).toFixed(2)) || 0;
-  const otklonenieKolvo = Number((((abonsData.oab || 0) / 100 * 90) / 100 * otkloneniePercentage).toFixed()) || 0;
+  const otklonenieKolvo = Number((((abonsData?.oab || 0) / 100 * 90) / 100 * otkloneniePercentage).toFixed()) || 0;
   const minY = Math.min(...[(abonsDataArray || [])[currentLineChart === 'aab' ? 0 : currentLineChart === 'nab' ? 1 : currentLineChart === 'otkl' ? 2 : 0]].flatMap(series => series?.data.map(d => parseInt(d.y))));
   const maxY = Math.max(...[(abonsDataArray || [])[currentLineChart === 'aab' ? 0 : currentLineChart === 'nab' ? 1 : currentLineChart === 'otkl' ? 2 : 0]].flatMap(series => series?.data.map(d => parseInt(d.y))));
   const tickStep = currentLineChart === 'aab' ? 200 : currentLineChart === 'nab' ? 50 : currentLineChart === 'otkl' ? 4 : 0;
@@ -88,14 +88,11 @@ const Dashboard = ({style, title, regions, onDateChange}) => {
       dispatch(fetchTariffs({date: reformatDate, square: currentSquare?.id}));
       dispatch(fetchRating({date: reformatDate, square: currentSquare?.id}));
     };
-    if (!regions) {
-      void getData();
-    }
+    void getData();
     // no more dependencies needed
   }, [currentSquare?.id, state.abonsNumDate]);
   
   useEffect(() => {
-    if (regions) return;
     if (state.periodDate1 && state.periodDate2) {
       let startDate = moment(state.periodDate1, "DD.MM.YYYY");
       let endDate = moment(state.periodDate2, "DD.MM.YYYY");
@@ -124,17 +121,17 @@ const Dashboard = ({style, title, regions, onDateChange}) => {
            style={{
              transform: `translate(-50%, -110%)`,
              position: 'fixed',
-             top: currentTariff.y + 'px',
-             left: currentTariff.x + 'px',
+             top: currentTariff?.y + 'px',
+             left: currentTariff?.x + 'px',
              zIndex: '1'
            }}
       >
         <div className="tariffs-tooltip-pointer"/>
         <div className="tariffs-tooltip-pie-block">
-          <span className="tariffs-tooltip-title">{currentTariff.tariffName}</span>
+          <span className="tariffs-tooltip-title">{currentTariff?.tariffName}</span>
           <div className="tariffs-tooltip-pie">
             <ResponsivePie
-              data={[{id: 'ААБ', value: currentTariff.aab}, {id: 'НАБ', value: currentTariff.nab},]}
+              data={[{id: 'ААБ', value: currentTariff?.aab}, {id: 'НАБ', value: currentTariff?.nab},]}
               height={80}
               width={170}
               innerRadius={0.65}
@@ -149,14 +146,14 @@ const Dashboard = ({style, title, regions, onDateChange}) => {
           <div className="tariffs-tooltip-stats">
             <div className="tariffs-tooltip-stats-inner">
               <span>ААБ</span>
-              <span>{Number(((currentTariff.aab || 0) / ((currentTariff.nab + currentTariff.aab) || 0) * 100).toFixed(1) || 0)}%</span>
+              <span>{Number(((currentTariff?.aab || 0) / ((currentTariff?.nab + currentTariff?.aab) || 0) * 100).toFixed(1) || 0)}%</span>
               <span>{currentTariff.aab}</span>
             </div>
             <div className="tariffs-tooltip-stats-divider"/>
             <div className="tariffs-tooltip-stats-inner">
               <span>НАБ</span>
-              <span>{Number(((currentTariff.nab || 0) / ((currentTariff.nab + currentTariff.aab) || 0) * 100).toFixed(1) || 0)}%</span>
-              <span>{currentTariff.nab}</span>
+              <span>{Number(((currentTariff?.nab || 0) / ((currentTariff?.nab + currentTariff?.aab) || 0) * 100).toFixed(1) || 0)}%</span>
+              <span>{currentTariff?.nab}</span>
             </div>
           </div>
         </div>
@@ -168,7 +165,7 @@ const Dashboard = ({style, title, regions, onDateChange}) => {
     <div className="dashboard" style={{...style, minHeight: window.innerHeight + 'px'}}>
       <div className="dashboard-header">
         <span className="pwd">Страницы / Статистика</span>
-        <span className="current-page-name">{title || 'Статистика'}</span>
+        <span className="current-page-name">{title || currentSquare?.square || 'Статистика'}</span>
       </div>
       <div className="statistics">
         <div
@@ -184,15 +181,15 @@ const Dashboard = ({style, title, regions, onDateChange}) => {
           >{state.abonsNumDate}</div>
           <div className="abons-oab">
             <span className="abons-card-title">ОАБ</span>
-            <span className="abons-card-value">{formatNumber(abonsData.oab)}</span>
+            <span className="abons-card-value">{formatNumber(abonsData?.oab)}</span>
           </div>
           <div className="abons-aab">
             <span className="abons-card-title">ААБ</span>
-            <span className="abons-card-value abons-card-value-up">{formatNumber(abonsData.aab)}</span>
+            <span className="abons-card-value abons-card-value-up">{formatNumber(abonsData?.aab)}</span>
           </div>
           <div className="abons-nab">
             <span className="abons-card-title">НАБ</span>
-            <span className="abons-card-value abons-card-value-down">{formatNumber(abonsData.nab)}</span>
+            <span className="abons-card-value abons-card-value-down">{formatNumber(abonsData?.nab)}</span>
           </div>
           <div className="abons-otk-num">
             <span className="abons-card-title">Отклонение</span>
@@ -219,9 +216,9 @@ const Dashboard = ({style, title, regions, onDateChange}) => {
           <span className="percentage-title">Проценты</span>
           <ResponsivePie
             data={[{
-              "id": "ААБ", "label": "ААБ", "value": abonsData.aab,
+              "id": "ААБ", "label": "ААБ", "value": abonsData?.aab,
             }, {
-              "id": "НАБ", "label": "НАБ", "value": abonsData.nab,
+              "id": "НАБ", "label": "НАБ", "value": abonsData?.nab,
             },]}
             colors={['#1DBF12', '#E31A1A']}
             margin={{top: 15, right: 0, bottom: 20, left: 0}}
@@ -248,7 +245,6 @@ const Dashboard = ({style, title, regions, onDateChange}) => {
         
         
         <div className="paper si-rating">
-          {regions && <div className="cover-disabler"/>}
           {fetchRatingLoading && <CoverLoader/>}
           <div style={{display: 'flex', justifyContent: 'space-between'}}>
             <h2 className="si-rating-block-title">Рейтинг СИ</h2>
@@ -294,7 +290,6 @@ const Dashboard = ({style, title, regions, onDateChange}) => {
         
         
         <div className="paper abons-in-graphs">
-          {regions && <div className="cover-disabler"/>}
           <div className="abons-in-graphs-numbers">
             <div
               className={`abons-in-numbers-date ${dateFieldName === 'periodDate1' ? 'abons-in-numbers-date-selected' : ''}`}
@@ -384,11 +379,10 @@ const Dashboard = ({style, title, regions, onDateChange}) => {
         
         
         <div className="paper tariffs" onMouseMove={() => setShowCurrentTariff(false)}>
-          {regions && <div className="cover-disabler"/>}
           {tariffsLoading && <CoverLoader/>}
           {
             showCurrentTariff &&
-            <TariffsPopup tariffName={currentTariff.tariffName}/>
+            <TariffsPopup tariffName={currentTariff?.tariffName}/>
           }
           <div style={{display: 'flex', justifyContent: 'space-between'}}>
             <h2 className="si-rating-block-title">Тарифы</h2>
@@ -408,7 +402,7 @@ const Dashboard = ({style, title, regions, onDateChange}) => {
             keys={['nab', 'aab']}
             indexBy="tariffName"
             margin={{top: 20, right: 37, bottom: 80, left: 0}}
-            padding={0.3}
+            padding={tariffData.length <= 8 ? 0.8 : 0.3}
             height={313}
             borderRadius={3}
             colors={['#E31A1A', '#1DBF12']}

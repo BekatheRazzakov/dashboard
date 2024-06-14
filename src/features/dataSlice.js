@@ -61,7 +61,6 @@ const DataSlice = createSlice({
     },
     setRegion: (state, action) => {
       state.currentRegion = action.payload;
-      state.currentSquare = null;
     },
     setDateFieldName: (state, action) => {
       state.dateFieldName = action.payload;

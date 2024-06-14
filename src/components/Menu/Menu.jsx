@@ -5,8 +5,8 @@ import { ReactComponent as Earth } from '../../assets/earth.svg';
 import { ReactComponent as Location } from '../../assets/location.svg';
 import { ReactComponent as Arrow } from '../../assets/arrow-right.svg';
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { setTab, setCurrentSquare } from "../../features/dataSlice";
-import { useNavigate, useLocation } from "react-router-dom";
+import { setCurrentSquare, setTab } from "../../features/dataSlice";
+import { useNavigate } from "react-router-dom";
 import { fetchSquares } from "../../features/dataThunk";
 import { ReactComponent as ArrowRight } from "../../assets/region-arrow-right.svg";
 import './menu.css';
@@ -14,7 +14,6 @@ import './menu.css';
 const Menu = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
   const currentMenu = useAppSelector(state => state.dataState.currentTab);
   const squares = useAppSelector(state => state.dataState.squares);
   const fetchAbonsLoading = useAppSelector(state => state.dataState.fetchAbonsLoading);
@@ -38,7 +37,7 @@ const Menu = () => {
         className={`menu-item ${currentMenu === 'stat' ? 'menu-item-selected' : ''}`}
         onClick={() => {
           dispatch(setTab('stat'));
-          navigate('statistics');
+          navigate('/');
         }}
       >
           <span className="menu-item-inner">
@@ -58,11 +57,10 @@ const Menu = () => {
             Регионы
           </span>
       </div>
-      <div style={{position: 'relative', opacity: location.pathname === '/regions' ? 0.5 : 1}}>
+      <div>
         <div
           className={`menu-item ${currentMenu === 'loc' ? 'menu-item-selected' : ''}`}
           onClick={() => {
-            if (location.pathname === '/regions') return;
             if (currentMenu === 'loc') {
               dispatch(setTab('stat'));
             } else dispatch(setTab('loc'));
@@ -101,10 +99,6 @@ const Menu = () => {
                           className={`menu-item ${selectedSquare === square.id ? 'menu-item-selected' : ''}`}
                           onClick={() => {
                             if (fetchAbonsLoading || abonsDataArrayLoading || fetchRatingLoading || tariffsLoading) return;
-                            if (selectedSquare === square.id) {
-                              setSelectedSquare('');
-                              return dispatch(setCurrentSquare(''));
-                            }
                             setSelectedSquare(square.id);
                             dispatch(setCurrentSquare(square));
                           }}
