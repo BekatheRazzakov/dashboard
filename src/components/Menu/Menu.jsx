@@ -9,6 +9,7 @@ import { setCurrentSquare, setTab } from "../../features/dataSlice";
 import { useNavigate } from "react-router-dom";
 import { fetchSquares } from "../../features/dataThunk";
 import { ReactComponent as ArrowRight } from "../../assets/region-arrow-right.svg";
+import Logout from "../logout/Logout";
 import './menu.css';
 
 const Menu = () => {
@@ -118,6 +119,7 @@ const Menu = () => {
         }
       </div>
     </div>
+    <Logout/>
   </div>);
 };
 

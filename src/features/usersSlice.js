@@ -2,11 +2,11 @@ import {createSlice} from "@reduxjs/toolkit";
 import {signIn, signUp} from "./userThunk";
 
 const initialState = {
-  user: '',
+  user: "",
   signInLoading: false,
   signUpLoading: false,
-  authorizationError: '',
-  authorizationMessage: '',
+  authorizationError: "",
+  authorizationMessage: "",
 };
 
 const UsersSlice = createSlice({
@@ -28,16 +28,21 @@ const UsersSlice = createSlice({
     builder.addCase(signUp.rejected, (state, {payload: error}) => {
       state.signUpLoading = false;
     });
-
+    
     builder.addCase(signIn.pending, (state) => {
       state.user = '';
+      state.authorizationError = '';
+      state.authorizationMessage = '';
       state.signInLoading = true;
     });
     builder.addCase(signIn.fulfilled, (state, {payload: res}) => {
       state.signInLoading = false;
+      state.user = res?.token || '' || res;
+      state.authorizationMessage = res.message;
     });
     builder.addCase(signIn.rejected, (state, {payload: error}) => {
       state.signInLoading = false;
+      state.authorizationError = error?.error || 'Произошла ошибка. Попробуйте позже';
     });
   },
 });

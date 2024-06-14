@@ -10,10 +10,12 @@ import { ResponsiveBar } from '@nivo/bar';
 import calendarIcon from '../../assets/calendar.svg';
 import defaultAvatar from '../../assets/default-avatar.png';
 import CoverLoader from "../../components/CoverLoader/CoverLoader";
+import { useNavigate } from "react-router-dom";
 import './dashboard.css';
 
 const Dashboard = ({style, title, regions, onDateChange}) => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const dateFieldName = useAppSelector(state => state.dataState.dateFieldName);
   const abonsData = useAppSelector(state => state.dataState.abonsData);
   const currentSquare = useAppSelector(state => state.dataState.currentSquare);
@@ -24,6 +26,7 @@ const Dashboard = ({style, title, regions, onDateChange}) => {
   const tariffsLoading = useAppSelector(state => state.dataState.tariffsLoading);
   const siRating = useAppSelector(state => state.dataState.rating);
   const tariffData = useAppSelector(state => state.dataState.tariffs);
+  const user = useAppSelector(state => state.userState.user);
   const [state, setState] = useState({
     periodDate1: moment().subtract(7, 'days').format('DD.MM.YYYY'),
     periodDate2: moment().subtract(1, 'days').format('DD.MM.YYYY'),
@@ -114,6 +117,10 @@ const Dashboard = ({style, title, regions, onDateChange}) => {
     }
     // no more dependencies needed
   }, [regions, state.abonsNumDate]);
+  
+  useEffect(() => {
+    if (!user) navigate('/sign-in');
+  }, [navigate, user]);
   
   const TariffsPopup = memo(() => {
     return (

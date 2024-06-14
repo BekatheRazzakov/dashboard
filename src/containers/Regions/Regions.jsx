@@ -6,15 +6,18 @@ import { ResponsivePie } from "@nivo/pie";
 import moment from "moment";
 import { fetchDataByRegions } from "../../features/dataThunk";
 import CoverLoader from "../../components/CoverLoader/CoverLoader";
+import { useNavigate } from "react-router-dom";
 import './regions.css';
 
 const Regions = () => {
+  const navigate = useNavigate();
   const regionsRef = useRef();
   const regionsMapRef = useRef();
   const dispatch = useAppDispatch();
   const currentRegion = useAppSelector(state => state.dataState.currentRegion);
   const dataByRegions = useAppSelector(state => state.dataState.dataByRegions);
   const fetchDataByRegionsLoading = useAppSelector(state => state.dataState.fetchDataByRegionsLoading);
+  const user = useAppSelector(state => state.userState.user);
   const [position, setPosition] = useState({x: 0, y: 0});
   const [mouseIsOnMap, setMouseIsOnMap] = useState(false);
   const [startDate, setStartDate] = useState(moment().subtract(1, 'days').format('YYYY-MM-DD'));
@@ -55,6 +58,10 @@ const Regions = () => {
       regionsMapRef.current?.removeEventListener('mousemove', handleMouseMove);
     };
   }, []);
+  
+  useEffect(() => {
+    if (!user) navigate('/sign-in');
+  }, [navigate, user]);
   
   const onRegionClick = (regionName) => {
     dispatch(setRegion(regionName));
