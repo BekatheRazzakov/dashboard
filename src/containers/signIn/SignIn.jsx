@@ -13,6 +13,7 @@ const SignIn = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const user = useAppSelector(state => state.userState.user);
+  const authorizationError = useAppSelector(state => state.userState.authorizationError);
 
   const onChange = (e) => {
     const {name, value} = e.target;
@@ -49,7 +50,7 @@ const SignIn = () => {
           onChange={onChange} required
         />
         <button type="submit" className="form-submit-btn">Войти</button>
-        <span className="form-container-helper">Запросить логин и пароль</span>
+        {authorizationError && <span className="form-container-helper">{authorizationError}</span>}
       </form>
     </div>
   );

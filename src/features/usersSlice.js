@@ -42,7 +42,7 @@ const UsersSlice = createSlice({
     });
     builder.addCase(signIn.rejected, (state, {payload: error}) => {
       state.signInLoading = false;
-      state.authorizationError = error?.error || 'Произошла ошибка. Попробуйте позже';
+      state.authorizationError = error?.error || 'Неправильные данные';
     });
   },
 });

@@ -27,7 +27,7 @@ export const signIn = createAsyncThunk("user/signIn", async (userData) => {
     (userData.login === 'ruslan' && userData.password === 'skyboss')
   ) {
     return userData.login;
-  } else return '';
+  } else throw new Error('Неправильные данные');
   // try {
   //   const response = await axiosApi.post("login/", userData);
   //   return response.data;
