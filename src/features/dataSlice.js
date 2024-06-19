@@ -137,11 +137,6 @@ const DataSlice = createSlice({
     
     builder.addCase(fetchDataByRegions.pending, (state) => {
       state.fetchDataByRegionsLoading = true;
-      state.rating = [];
-      state.tariffs = [];
-      state.abonsDataArray[0].data = [];
-      state.abonsDataArray[1].data = [];
-      state.abonsDataArray[2].data = [];
     });
     builder.addCase(fetchDataByRegions.fulfilled, (state, action) => {
       state.fetchDataByRegionsLoading = false;
