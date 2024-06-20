@@ -188,15 +188,15 @@ const Dashboard = ({style, title, regions, onDateChange}) => {
           >{state.abonsNumDate}</div>
           <div className="abons-oab">
             <span className="abons-card-title">ОАБ</span>
-            <span className="abons-card-value">{formatNumber(abonsData?.oab)}</span>
+            <span className="abons-card-value">{formatNumber(abonsData?.oab || 0)}</span>
           </div>
           <div className="abons-aab">
             <span className="abons-card-title">ААБ</span>
-            <span className="abons-card-value abons-card-value-up">{formatNumber(abonsData?.aab)}</span>
+            <span className="abons-card-value abons-card-value-up">{formatNumber(abonsData?.aab || 0)}</span>
           </div>
           <div className="abons-nab">
             <span className="abons-card-title">НАБ</span>
-            <span className="abons-card-value abons-card-value-down">{formatNumber(abonsData?.nab)}</span>
+            <span className="abons-card-value abons-card-value-down">{formatNumber(abonsData?.nab || 0)}</span>
           </div>
           <div className="abons-otk-num">
             <span className="abons-card-title">Отклонение</span>
@@ -409,7 +409,7 @@ const Dashboard = ({style, title, regions, onDateChange}) => {
             keys={['nab', 'aab']}
             indexBy="tariffName"
             margin={{top: 20, right: 37, bottom: 80, left: 0}}
-            padding={tariffData.length <= 8 ? 0.8 : 0.3}
+            padding={tariffData?.length <= 8 ? 0.8 : 0.3}
             height={313}
             borderRadius={3}
             colors={['#E31A1A', '#1DBF12']}
