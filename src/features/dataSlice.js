@@ -129,7 +129,7 @@ const DataSlice = createSlice({
     });
     builder.addCase(fetchTariffs.fulfilled, (state, action) => {
       state.tariffsLoading = false;
-      state.tariffs = action.payload;
+      state.tariffs = action.payload || [];
     });
     builder.addCase(fetchTariffs.rejected, (state) => {
       state.tariffsLoading = false;

@@ -78,7 +78,7 @@ export const fetchTariffs = createAsyncThunk("user/fetchTariffs", async (data) =
       `/tariffs_daily?day=${data?.date}${data.square ? `&square=${data?.square}` : ''}`
     );
     const res = await req.data;
-    return res.tariffs.filter(tariff => tariff.aab > 5 && tariff.nab > 5);
+    return res.tariffs?.filter(tariff => tariff.aab > 5 && tariff.nab > 5);
   } catch (e) {
     console.log(e);
   }
