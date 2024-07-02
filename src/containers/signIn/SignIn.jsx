@@ -29,14 +29,6 @@ const SignIn = () => {
   };
 
   useEffect(() => {
-    if (
-      user ||
-      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
-      /iPad|Android|tablet|touch/i.test(navigator.userAgent)
-    ) navigate('/bonuses');
-  }, [navigate, user]);
-  
-  useEffect(() => {
     if (user) navigate('/statistics');
   }, [navigate, user]);
 

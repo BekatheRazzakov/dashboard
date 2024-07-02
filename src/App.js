@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import Menu from "./components/Menu/Menu";
 import Dashboard from "./containers/Dashboard/Dashboard";
 import { useEffect } from "react";
@@ -14,7 +14,6 @@ moment.locale('ru');
 
 const App = () => {
   const location = useLocation();
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const currentSquare = useAppSelector(state => state.dataState.currentSquare);
   const user = useAppSelector(state => state.userState.user);
@@ -26,6 +25,7 @@ const App = () => {
     window.addEventListener('click', () => {
       dispatch(setDropdown(''));
     });
+    // no more dependencies needed
   }, [dispatch]);
   
   useEffect(() => {
@@ -34,11 +34,13 @@ const App = () => {
   }, [location.pathname]);
   
   return (
-    <div className="App">
+    <div className='App'>
       {location.pathname !== '/sign-in' && <Menu/>}
       <Routes>
-        <Route path='*' element={<Navigate to="/statistics" replace/>}/>
-        <Route path='statistics' element={<Dashboard title={currentSquare?.square}/>}/>
+        <Route path='*'
+          element={<Navigate to={user ? "/statistics" : "/sign-in"} replace/>}/>
+        <Route path='statistics'
+          element={<Dashboard title={currentSquare?.square}/>}/>
         <Route path='regions' element={<Regions/>}/>
         <Route path='sign-in' element={<SignIn/>}/>
       </Routes>
