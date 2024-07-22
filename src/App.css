@@ -37,3 +37,8 @@ html, body, #root, .App {
   flex-wrap: nowrap;
   font-family: 'Roboto', serif;
 }
+
+.region-squares,
+.si-rating-staff-list {
+  overscroll-behavior: contain;
+}

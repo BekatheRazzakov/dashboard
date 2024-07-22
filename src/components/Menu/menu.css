@@ -5,11 +5,15 @@
   top: 0;
   left: 0;
   min-width: 312px;
-  height: 100%;
+  height: 100vh;
   border-right: 1px solid #E1E4E6;
   background-color: var(--secondary);
   z-index: 11;
   overflow-y: scroll;
+}
+
+.menu-container {
+  margin-right: 312px;
 }
 
 .logo {
@@ -121,6 +125,14 @@
 
 .region-squares {
   margin-top: 5px;
+  max-height: 270px;
+  overflow-y: scroll;
+  
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 .region-squares .menu-item {

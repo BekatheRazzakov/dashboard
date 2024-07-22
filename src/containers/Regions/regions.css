@@ -1,7 +1,5 @@
 .regions {
-  position: relative;
   flex-grow: 1;
-  margin-left: 312px;
   background-color: var(--surface);
 }
 

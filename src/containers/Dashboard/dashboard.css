@@ -2,10 +2,10 @@
   position: relative;
   padding: 20px 24px;
   flex-grow: 1;
-  height: 100vh;
+  min-height: 100vh;
+  max-height: 100%;
   background-color: #F3F3F3;
   box-sizing: border-box;
-  margin-left: 312px;
 }
 
 .paper {

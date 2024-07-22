@@ -8,7 +8,9 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { setCurrentSquare, setTab } from "../../features/dataSlice";
 import { useNavigate } from "react-router-dom";
 import { fetchSquares } from "../../features/dataThunk";
-import { ReactComponent as ArrowRight } from "../../assets/region-arrow-right.svg";
+import {
+  ReactComponent as ArrowRight
+} from "../../assets/region-arrow-right.svg";
 import Logout from "../logout/Logout";
 import './menu.css';
 
@@ -28,57 +30,57 @@ const Menu = () => {
     dispatch(fetchSquares());
   }, [dispatch]);
   
-  return (<div className="menu">
-    <div className="logo">
-      <img src={logo} alt="logo"/>
-      <span>Dashboard</span>
-    </div>
-    <div className="menu-items">
-      <div
-        className={`menu-item ${currentMenu === 'stat' ? 'menu-item-selected' : ''}`}
-        onClick={() => {
-          dispatch(setTab('stat'));
-          navigate('/');
-        }}
-      >
-          <span className="menu-item-inner">
+  return (
+    <div className="menu-container">
+      <div className='menu'>
+        <div className='logo'>
+          <img src={logo} alt='logo'/>
+          <span>Dashboard</span>
+        </div>
+        <div className='menu-items'>
+          <div
+            className={`menu-item ${currentMenu === 'stat' ? 'menu-item-selected' : ''}`}
+            onClick={() => {
+              dispatch(setTab('stat'));
+              navigate('/');
+            }}
+          >
+          <span className='menu-item-inner'>
             <Donut/>
             Статистика
           </span>
-      </div>
-      <div
-        className={`menu-item ${currentMenu === 'reg' ? 'menu-item-selected' : ''}`}
-        onClick={() => {
-          dispatch(setTab('reg'));
-          navigate('regions');
-        }}
-      >
-          <span className="menu-item-inner">
+          </div>
+          <div
+            className={`menu-item ${currentMenu === 'reg' ? 'menu-item-selected' : ''}`}
+            onClick={() => {
+              dispatch(setTab('reg'));
+              navigate('regions');
+            }}
+          >
+          <span className='menu-item-inner'>
             <Earth/>
             Регионы
           </span>
-      </div>
-      <div>
-        <div
-          className={`menu-item ${currentMenu === 'loc' ? 'menu-item-selected' : ''}`}
-          onClick={() => {
-            if (currentMenu === 'loc') {
-              dispatch(setTab('stat'));
-            } else dispatch(setTab('loc'));
-          }}
-        >
-          <span className="menu-item-inner">
+          </div>
+          <div>
+            <div
+              className={`menu-item ${currentMenu === 'loc' ? 'menu-item-selected' : ''}`}
+              onClick={() => {
+                if (currentMenu === 'loc') {
+                  dispatch(setTab('stat'));
+                } else dispatch(setTab('loc'));
+              }}
+            >
+          <span className='menu-item-inner'>
             <Location/>
             Квадрат
-            <div className="menu-item-location">
+            <div className='menu-item-location'>
               <Arrow/>
             </div>
           </span>
-        </div>
-        {
-          currentMenu === 'loc' && <div className="menu-item-squares">
-            {
-              Object.keys(squares || {}).map((key) => (
+            </div>
+            {currentMenu === 'loc' && <div className='menu-item-squares'>
+              {Object.keys(squares || {}).map((key) => (
                 <div key={key}>
                   <div
                     className={`menu-item ${selectedRegion === key ? 'menu-item-selected' : ''}`}
@@ -88,39 +90,37 @@ const Menu = () => {
                       } else setSelectedRegion(key);
                     }}
                   >
-                    <span className="menu-item-inner menu-item-region">
+                    <span className='menu-item-inner menu-item-region'>
                       {key}
                       <ArrowRight/>
                     </span>
                   </div>
-                  <div className="region-squares">
-                    {
-                      selectedRegion === key && squares[key]?.map((square) => (
-                        <div
-                          className={`menu-item ${selectedSquare === square.id ? 'menu-item-selected' : ''}`}
-                          onClick={() => {
-                            if (fetchAbonsLoading || abonsDataArrayLoading || fetchRatingLoading || tariffsLoading) return;
-                            setSelectedSquare(square.id);
-                            dispatch(setCurrentSquare(square));
-                          }}
-                          key={square.id}
-                        >
-                          <span className="menu-item-inner menu-item-region-square">
+                  <div className='region-squares'>
+                    {selectedRegion === key && squares[key]?.map((square) => (
+                      <div
+                        className={`menu-item ${selectedSquare === square.id ? 'menu-item-selected' : ''}`}
+                        onClick={() => {
+                          if (fetchAbonsLoading || abonsDataArrayLoading || fetchRatingLoading || tariffsLoading) return;
+                          setSelectedSquare(square.id);
+                          dispatch(setCurrentSquare(square));
+                        }}
+                        key={square.id}
+                      >
+                          <span className='menu-item-inner menu-item-region-square'>
                             {square.square}
                           </span>
-                        </div>
-                      ))
-                    }
+                      </div>
+                    ))}
                   </div>
                 </div>
-              ))
-            }
+              ))}
+            </div>}
           </div>
-        }
+        </div>
+        <Logout/>
       </div>
     </div>
-    <Logout/>
-  </div>);
+  );
 };
 
 export default Menu;
