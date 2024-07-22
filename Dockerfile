@@ -13,9 +13,6 @@ RUN npm install
 # Copy the rest of the application code to the working directory
 COPY . .
 
-# Build the React app for production
-RUN npm run build
-
 # Expose port 80
 EXPOSE 80
 
