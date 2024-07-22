@@ -102,7 +102,7 @@ const DataSlice = createSlice({
     builder.addCase(fetchSquares.fulfilled, (state, action) => {
       state.squaresLoading = false;
       let data = {};
-      for (const square of action?.payload) {
+      for (const square of action?.payload || []) {
         if (square.regions?.length) {
           data[square.regions[0]] = [...data[square.regions[0]] || [], square];
         }

@@ -282,7 +282,7 @@ const Dashboard = ({style, title, regions, onDateChange}) => {
             >Дем</span>
           </div>
           <div className="si-rating-staff-list">
-            {!!siRating.length && siRating.slice(0, siRating.length).sort((a, b) => parseInt(b[siSortBy]) - parseInt(a[siSortBy]))
+            {!!siRating?.length && siRating.slice(0, siRating?.length).sort((a, b) => parseInt(b[siSortBy]) - parseInt(a[siSortBy]))
             .map(si => (<div className="si-rating-staff-item">
               <div style={{display: 'flex', gap: '9px', alignItems: 'center', flexGrow: 1, maxWidth: '210px'}}>
                 <img src={defaultAvatar} alt="Сервис инженер"/>
