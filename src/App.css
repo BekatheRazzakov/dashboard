@@ -18,6 +18,10 @@
   --purple-main: #4318FF;
 }
 
+* {
+  overscroll-behavior: contain;
+}
+
 html {
   width: 1920px!important;
   user-select: none;
@@ -36,9 +40,4 @@ html, body, #root, .App {
   align-items: stretch;
   flex-wrap: nowrap;
   font-family: 'Roboto', serif;
-}
-
-.region-squares,
-.si-rating-staff-list {
-  overscroll-behavior: contain;
 }
