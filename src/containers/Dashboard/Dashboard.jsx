@@ -419,7 +419,7 @@ const Dashboard = ({ style, title, regions, onDateChange }) => {
           <div className='abons-chart'>
             {abonsDataArrayLoading && <CoverLoader/>}
             <ResponsiveLine
-              data={!!abonsDataArray[0]['data'].length && currentLineChart === 'aab' ? [abonsDataArray[0]] : currentLineChart === 'nab' ? [abonsDataArray[1]] : currentLineChart === 'otkl' ? [abonsDataArray[2]] : []}
+              data={!!abonsDataArray?.[0]['data'].length && currentLineChart === 'aab' ? [abonsDataArray?.[0]] : currentLineChart === 'nab' ? [abonsDataArray[1]] : currentLineChart === 'otkl' ? [abonsDataArray[2]] : []}
               colors={[currentLineChart === 'aab' ? ['#1DBF12'] : currentLineChart === 'nab' ? ['#E31A1A'] : currentLineChart === 'otkl' ? ['#4318FF'] : []]}
               motionConfig='gentle'
               margin={{ top: 30, right: 45, bottom: 30, left: 0 }}
@@ -518,7 +518,7 @@ const Dashboard = ({ style, title, regions, onDateChange }) => {
                     }}
                     onMouseMove={(e) => {
                       e.stopPropagation();
-                      const newTariff = tariffData.filter(tariff => tariff.tariffName === e.target.getAttribute('tariffName'))[0];
+                      const newTariff = tariffData?.filter(tariff => tariff?.tariffName === e.target.getAttribute('tariffName'))?.[0];
                       setCurrentTariff(prevState => (
                         {
                           ...prevState,
