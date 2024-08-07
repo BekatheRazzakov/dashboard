@@ -399,7 +399,7 @@ const Dashboard = ({ style, title, regions, onDateChange }) => {
                 lineHeight: '36px',
               }}
             >
-              {abonsDataArray[0].data.length ? abonsDataArray[0].data[abonsDataArray[0].data.length - 1]?.y + abonsDataArray[1].data[abonsDataArray[0].data.length - 1]?.y : 0}
+              {abonsDataArray?.[0].data.length ? abonsDataArray?.[0].data[abonsDataArray?.[0].data.length - 1]?.y + abonsDataArray?.[1].data[abonsDataArray?.[0].data.length - 1]?.y : 0}
             </span>
             <div className='abon-types'>
               <span
