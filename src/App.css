@@ -23,7 +23,7 @@
 }
 
 html {
-  width: 1920px!important;
+  min-width: 1920px!important;
   user-select: none;
 }
 

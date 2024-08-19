@@ -43,6 +43,19 @@
   fill: var(--surface);
 }
 
+.regions-tooltip-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  user-select: none;
+}
+
+.regions-tooltip-container-inner {
+  position: relative;
+  user-select: none;
+}
+
 .regions-tooltip-block {
   position: absolute;
   top: 0;

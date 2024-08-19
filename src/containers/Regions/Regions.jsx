@@ -82,37 +82,57 @@ const Regions = () => {
           >
             {fetchDataByRegionsLoading && <CoverLoader/>}
             {hoverRegion && mouseIsOnMap && !fetchDataByRegionsLoading &&
-              <div className='regions-tooltip-block'
-                style={{ top: position.y - 100, left: position.x - 530 }}>
-                <div className='regions-tooltip'>
-                  <div className='regions-tooltip-pointer'/>
-                  <div className='regions-tooltip-pie-block'>
-                    <span className='regions-tooltip-title'>{hoverRegion?.title || 'Нет данных'}</span>
-                    <div className='regions-tooltip-pie'>
-                      <ResponsivePie
-                        data={[
-                          {
-                            id: 'ААБ',
-                            value: hoverRegion?.aab || 0
-                          }, { id: 'НАБ', value: hoverRegion?.nab || 0 },
-                        ]}
-                        height={80}
-                        width={170}
-                        innerRadius={0.65}
-                        colors={['#1DBF12', '#E31A1A',]}
-                        borderColor={{
-                          from: 'color', modifiers: [['darker', 0.2]]
-                        }}
-                        enableSliceLabels={false}
-                        isInteractive={false}
-                        enableArcLabels={false}
-                        enableArcLinkLabels={false}
-                      />
-                    </div>
-                    <div className='regions-tooltip-stats'>
-                      <div className='regions-tooltip-stats-inner'>
-                        <span>ААБ</span>
-                        <span>
+              <div className='regions-tooltip-container'>
+                <div className='regions-tooltip-container-inner'>
+                  <div
+                    className='regions-tooltip-block'
+                    style={{
+                      top: position.y - 100,
+                      left: position.x - 220
+                    }}
+                  >
+                    <div className='regions-tooltip'>
+                      <div className='regions-tooltip-pointer'/>
+                      <div className='regions-tooltip-pie-block'>
+                        <span className='regions-tooltip-title'>{hoverRegion?.title || 'Нет данных'}</span>
+                        <div className='regions-tooltip-pie'>
+                          <ResponsivePie
+                            data={[
+                              {
+                                id: 'ААБ',
+                                value: hoverRegion?.aab || 0
+                              },
+                              {
+                                id: 'НАБ',
+                                value: hoverRegion?.nab || 0
+                              },
+                            ]}
+                            height={80}
+                            width={170}
+                            innerRadius={0.65}
+                            colors={[
+                              '#1DBF12',
+                              '#E31A1A',
+                            ]}
+                            borderColor={{
+                              from: 'color',
+                              modifiers: [
+                                [
+                                  'darker',
+                                  0.2
+                                ]
+                              ]
+                            }}
+                            enableSliceLabels={false}
+                            isInteractive={false}
+                            enableArcLabels={false}
+                            enableArcLinkLabels={false}
+                          />
+                        </div>
+                        <div className='regions-tooltip-stats'>
+                          <div className='regions-tooltip-stats-inner'>
+                            <span>ААБ</span>
+                            <span>
                           {isNaN(hoverRegion?.aab / (
                             (
                               hoverRegion?.nab + hoverRegion?.aab
@@ -123,12 +143,12 @@ const Regions = () => {
                             )
                           ) * 100).toFixed(1)}%
                         </span>
-                        <span>{hoverRegion?.aab || 0}</span>
-                      </div>
-                      <div className='regions-tooltip-stats-divider'/>
-                      <div className='regions-tooltip-stats-inner'>
-                        <span>НАБ</span>
-                        <span>
+                            <span>{hoverRegion?.aab || 0}</span>
+                          </div>
+                          <div className='regions-tooltip-stats-divider'/>
+                          <div className='regions-tooltip-stats-inner'>
+                            <span>НАБ</span>
+                            <span>
                           {isNaN(hoverRegion?.nab / (
                             (
                               hoverRegion?.nab + hoverRegion?.aab
@@ -139,17 +159,22 @@ const Regions = () => {
                             )
                           ) * 100).toFixed(1)}%
                         </span>
-                        <span>{hoverRegion?.nab || 0}</span>
+                            <span>{hoverRegion?.nab || 0}</span>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>}
-            <svg width='1319'
+              </div>
+            }
+            <svg
+              width='1319'
               height='616'
               viewBox='0 0 1319 616'
               fill='none'
-              xmlns='http://www.w3.org/2000/svg'>
+              xmlns='http://www.w3.org/2000/svg'
+            >
               <g>
                 <path
                   className='regions-batken'
